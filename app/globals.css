@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #ffffff;
+  --ink-panel: #f5f6f9;
+  --paper: #14161f;
+  --signal: #2f7fe0;
+  --signal-dim: #1b4f9c;
+  --line: #e2e4ea;
+  --teal: #7cb92e;
+
+  --font-display: var(--font-space-grotesk);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-plex-mono);
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-panel: var(--ink-panel);
+  --color-paper: var(--paper);
+  --color-signal: var(--signal);
+  --color-signal-dim: var(--signal-dim);
+  --color-line: var(--line);
+  --color-teal: var(--teal);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+@keyframes dash-travel {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+
+.pulse-path {
+  stroke-dasharray: 6 10;
+  animation: dash-travel 18s linear infinite;
+}
+
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.blink-dot {
+  animation: blink-dot 2.2s ease-in-out infinite;
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.rise-in {
+  animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.brand-gradient-text {
+  background: linear-gradient(90deg, var(--signal), var(--teal));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
