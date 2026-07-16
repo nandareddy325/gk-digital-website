@@ -59,7 +59,6 @@ function WhatsappIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-// Simple monogram-style platform badges (no third-party logos/IP used)
 function PlatformBadge({ label }: { label: string }) {
   return (
     <span className="flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-[11px] text-paper/70">
@@ -88,8 +87,7 @@ const linkGroups = [
       { label: "Process", href: "/process" },
       { label: "Industries", href: "/industries" },
       { label: "Portfolio", href: "/portfolio" },
-      { label: "Case Studies", href: "/case-studies" },
-      { label: "Careers", href: "/careers" },
+      { label: "Blog", href: "/blog" },
       { label: "Pricing", href: "/pricing" },
       { label: "FAQ", href: "/faq" },
       { label: "Testimonials", href: "/testimonials" },
@@ -123,7 +121,6 @@ export default function Footer() {
 
   return (
     <footer className="relative overflow-hidden border-t border-line">
-      {/* Gradient accent line at top */}
       <div
         className="absolute top-0 left-40 right-40 h-[1px]"
         style={{
@@ -138,7 +135,6 @@ export default function Footer() {
         aria-hidden="true"
       />
 
-      {/* Newsletter + trust strip */}
       <div className="relative border-b border-line py-8">
         <div className="mx-auto max-w-6xl px-4">
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
@@ -206,20 +202,17 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Main footer content */}
       <div className="relative py-10">
         <div className="mx-auto max-w-6xl px-4">
-          {/* Logo | Services | Company | Contact (right-most) */}
           <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.1fr_0.8fr_0.9fr_1fr]">
-            {/* Logo + description */}
             <div className="max-w-xs">
-              <div className="relative h-20 w-100">
+              <div className="relative h-16 w-40">
                 <Image
-                  src="/GK_Digital_Logo.png"
+                  src="/GK_Digital_Logo.jpg"
                   alt="GK Digital Solutions"
                   fill
+                  sizes="160px"
                   className="object-contain object-left"
-                  priority
                 />
               </div>
               <p className="mt-2.5 text-xs leading-relaxed text-paper/70">
@@ -229,7 +222,6 @@ export default function Footer() {
               </p>
             </div>
 
-            {/* Services / Company link groups */}
             {linkGroups.map((group) => (
               <div key={group.title}>
                 <h4 className="font-mono text-[10px] uppercase tracking-wider text-paper/60">
@@ -250,7 +242,6 @@ export default function Footer() {
               </div>
             ))}
 
-            {/* Contact — right-most column */}
             <div>
               <h4 className="font-mono text-[10px] uppercase tracking-wider text-paper/60">
                 Contact
@@ -267,11 +258,11 @@ export default function Footer() {
                 </li>
                 <li>
                   <a
-                    href="tel:+91XXXXXXXXXX"
+                    href="tel:+917569622606"
                     className="flex items-center gap-2 text-xs text-paper/80 transition-colors hover:text-signal"
                   >
                     <Phone className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
-                    +91 XXXXX XXXXX
+                    +91 75696 22606
                   </a>
                 </li>
                 <li className="flex items-start gap-2 text-xs text-paper/80">
@@ -310,7 +301,7 @@ export default function Footer() {
                   <LinkedinIcon className="h-3.5 w-3.5" />
                 </a>
                 <a
-                  href="https://wa.me/91XXXXXXXXXX"
+                  href="https://wa.me/917569622606?text=Hi!%20I%27d%20like%20to%20know%20more%20about%20GK%20Digital%20Solutions%27%20services."
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp"
@@ -328,18 +319,6 @@ export default function Footer() {
               reserved.
             </span>
             <div className="flex items-center gap-5">
-              <Link
-                href="/privacy-policy"
-                className="transition-colors hover:text-signal"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                href="/terms-of-service"
-                className="transition-colors hover:text-signal"
-              >
-                Terms of Service
-              </Link>
               <span>A GKA1 Enterprises company</span>
               <button
                 onClick={scrollToTop}

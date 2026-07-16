@@ -1,8 +1,28 @@
 import Link from "next/link";
-import { ArrowUpRight,Clock,ShieldCheck,Sparkles,Target,Search,MessageCircle,Palette,
-  TrendingUp,Mail,Star,Building2,Home as HomeIcon,ShoppingCart,UtensilsCrossed,CheckCircle2,
+import Image from "next/image";
+import {
+  ArrowUpRight,
+  Clock,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  Search,
+  MessageCircle,
+  Palette,
+  TrendingUp,
+  Mail,
+  Star,
+  Building2,
+  Home as HomeIcon,
+  ShoppingCart,
+  UtensilsCrossed,
+  CheckCircle2,
 } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import CountUp from "@/components/CountUp";
+
+const WHATSAPP_LINK =
+  "https://wa.me/917569622606?text=Hi!%20I%27d%20like%20to%20know%20more%20about%20GK%20Digital%20Solutions%27%20services.";
 
 // ---------- PulseLine ----------
 function PulseLine({ className = "" }: { className?: string }) {
@@ -29,7 +49,6 @@ function PulseLine({ className = "" }: { className?: string }) {
           </feMerge>
         </filter>
       </defs>
-
       <path
         d="M0,120 L90,120 L120,60 L150,140 L180,40 L210,120 L260,120 L290,90 L320,120 L420,120 L450,70 L480,130 L510,50 L540,120 L620,120 L650,95 L680,120 L780,120 L810,55 L840,135 L870,30 L900,120 L980,120 L1010,85 L1040,120 L1200,120"
         stroke="var(--line)"
@@ -52,13 +71,69 @@ function PulseLine({ className = "" }: { className?: string }) {
   );
 }
 
-// ---------- Hero ----------
-const heroStats = [
-  { value: "40+", label: "Active campaigns" },
-  { value: "3.2×", label: "Avg. lead-to-close lift" },
-  { value: "₹2.4Cr+", label: "Ad spend managed" },
-];
+// ---------- Hero image mockup ----------
+function DashboardMockup() {
+  return (
+    <div className="relative hidden lg:block">
+      <style>{`
+        @keyframes badge-float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-8px) rotate(-2deg); }
+        }
+        @keyframes image-float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-14px); }
+        }
+        .mockup-image { animation: image-float 7s ease-in-out infinite; }
+        .mockup-badge { animation: badge-float 5s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .mockup-image, .mockup-badge { animation: none !important; }
+        }
+      `}</style>
 
+      <div className="mockup-image relative">
+        <Image
+          src="/hero-dashboard.png"
+          alt="GK Digital Solutions analytics dashboard"
+          width={1100}
+          height={733}
+          priority
+          className="h-auto w-full rounded-2xl"
+        />
+
+        {/* Floating badge — top-left */}
+        <div
+          className="mockup-badge absolute -left-6 top-8 flex items-center gap-2 rounded-xl border border-line bg-ink-panel/90 px-4 py-3 shadow-xl backdrop-blur-md"
+          style={{ animationDelay: "1s" }}
+        >
+          <CheckCircle2 className="h-4 w-4 text-teal" strokeWidth={2} />
+          <div>
+            <div className="text-xs font-semibold text-paper">New lead</div>
+            <div className="text-[10px] text-paper/40">
+              synced to CRM · 2s ago
+            </div>
+          </div>
+        </div>
+
+        {/* Floating badge — bottom-right */}
+        <div
+          className="mockup-badge absolute -bottom-4 -right-4 flex items-center gap-2 rounded-xl border border-line bg-ink-panel/90 px-4 py-3 shadow-xl backdrop-blur-md"
+          style={{ animationDelay: "2.2s" }}
+        >
+          <TrendingUp className="h-4 w-4 text-signal" strokeWidth={2} />
+          <div>
+            <div className="text-xs font-semibold text-paper">
+              <CountUp end={18} /> brands
+            </div>
+            <div className="text-[10px] text-paper/40">live right now</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------- Hero ----------
 function Hero() {
   return (
     <section id="top" className="relative overflow-hidden pt-40 pb-20">
@@ -67,68 +142,91 @@ function Hero() {
         style={{ background: "linear-gradient(135deg, var(--signal), var(--teal))" }}
         aria-hidden="true"
       />
-      <div className="relative mx-auto max-w-6xl px-6">
-        <Reveal>
-          <div className="flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.2em] text-teal">
-            <span className="h-1.5 w-1.5 rounded-full bg-teal blink-dot" />
-            Live across 40+ campaigns · Hyderabad
-          </div>
-        </Reveal>
+      <div className="relative mx-auto grid max-w-6xl gap-12 px-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+        <div>
+          <Reveal>
+            <div className="flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.2em] text-teal">
+              <span className="h-1.5 w-1.5 rounded-full bg-teal blink-dot" />
+              Live across 40+ campaigns · Hyderabad
+            </div>
+          </Reveal>
 
-        <Reveal delay={80}>
-          <h1 className="mt-6 max-w-3xl font-display text-5xl font-semibold leading-[1.05] tracking-tight text-paper md:text-7xl">
-            Your ad spend, tracked like a pipeline —{" "}
-            <span
-              className="bg-clip-text text-transparent"
-              style={{
-                backgroundImage: "linear-gradient(90deg, var(--signal), var(--teal))",
-              }}
-            >
-              not a vanity metric.
-            </span>
-          </h1>
-        </Reveal>
+          <Reveal delay={80}>
+            <h1 className="mt-6 font-display text-5xl font-semibold leading-[1.05] tracking-tight text-paper md:text-6xl">
+              Your ad spend, tracked like a pipeline —{" "}
+              <span
+                className="bg-clip-text text-transparent"
+                style={{
+                  backgroundImage: "linear-gradient(90deg, var(--signal), var(--teal))",
+                }}
+              >
+                not a vanity metric.
+              </span>
+            </h1>
+          </Reveal>
 
-        <Reveal delay={160}>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-paper/70">
-            GK Digital Solutions runs Meta, Google and WhatsApp campaigns for
-            interior design, real estate and hospitality brands — and wires
-            every lead straight into your CRM, so you see what closes, not
-            just what clicks.
-          </p>
-        </Reveal>
+          <Reveal delay={160}>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-paper/70">
+              GK Digital Solutions runs Meta, Google and WhatsApp campaigns for
+              interior design, real estate and hospitality brands — and wires
+              every lead straight into your CRM, so you see what closes, not
+              just what clicks.
+            </p>
+          </Reveal>
 
-        <Reveal delay={240}>
-          <div className="mt-9 flex flex-wrap items-center gap-4">
-            <Link
-              href="/contact"
-              className="rounded-full px-6 py-3 font-mono text-[13px] uppercase tracking-wider text-white transition-transform hover:scale-[1.03]"
-              style={{ background: "linear-gradient(90deg, var(--signal), var(--teal))" }}
-            >
-              Book a free audit
-            </Link>
-            <Link
-              href="#results"
-              className="rounded-full border border-line px-6 py-3 font-mono text-[13px] uppercase tracking-wider text-paper/80 transition-colors hover:border-signal/50 hover:text-signal"
-            >
-              See results
-            </Link>
-          </div>
-        </Reveal>
+          <Reveal delay={240}>
+            <div className="mt-9 flex flex-wrap items-center gap-4">
+              <Link
+                href="/contact"
+                className="rounded-full px-6 py-3 font-mono text-[13px] uppercase tracking-wider text-white shadow-lg transition-transform hover:scale-[1.03]"
+                style={{
+                  background: "linear-gradient(90deg, var(--signal), var(--teal))",
+                  boxShadow: "0 10px 30px -8px rgba(47,127,224,0.4)",
+                }}
+              >
+                Book a free audit
+              </Link>
+              <Link
+                href="#results"
+                className="rounded-full border border-line px-6 py-3 font-mono text-[13px] uppercase tracking-wider text-paper/80 transition-colors hover:border-signal/50 hover:text-signal"
+              >
+                See results
+              </Link>
+            </div>
+          </Reveal>
 
-        <Reveal delay={320}>
-          <div className="mt-16 grid grid-cols-3 gap-6 border-t border-line pt-8 md:max-w-xl">
-            {heroStats.map((stat) => (
-              <div key={stat.label}>
+          <Reveal delay={320}>
+            <div className="mt-16 grid grid-cols-3 gap-6 border-t border-line pt-8 max-w-xl">
+              <div>
                 <div className="font-display text-2xl font-semibold text-paper md:text-3xl">
-                  {stat.value}
+                  <CountUp end={40} suffix="+" />
                 </div>
                 <div className="mt-1 text-xs leading-snug text-paper/50">
-                  {stat.label}
+                  Active campaigns
                 </div>
               </div>
-            ))}
-          </div>
+              <div>
+                <div className="font-display text-2xl font-semibold text-paper md:text-3xl">
+                  <CountUp end={3.2} decimals={1} suffix="×" />
+                </div>
+                <div className="mt-1 text-xs leading-snug text-paper/50">
+                  Avg. lead-to-close lift
+                </div>
+              </div>
+              <div>
+                <div className="font-display text-2xl font-semibold text-paper md:text-3xl">
+                  ₹<CountUp end={2.4} decimals={1} suffix="Cr+" />
+                </div>
+                <div className="mt-1 text-xs leading-snug text-paper/50">
+                  Ad spend managed
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+
+        <Reveal delay={200}>
+          <DashboardMockup />
         </Reveal>
       </div>
 
@@ -181,7 +279,7 @@ function IndustryStrip() {
   );
 }
 
-// ---------- Services ----------
+// ---------- Services (bento grid) ----------
 const services = [
   {
     icon: Target,
@@ -189,6 +287,7 @@ const services = [
     desc: "Full-funnel campaigns built around your actual sales stages, not just impressions — tuned weekly against real close rates.",
     metric: "3.2x",
     metricLabel: "avg. ROAS",
+    featured: true,
   },
   {
     icon: Search,
@@ -200,14 +299,14 @@ const services = [
   {
     icon: MessageCircle,
     title: "WhatsApp & CRM Automation",
-    desc: "Every lead auto-tagged, followed up and dropped into your pipeline within minutes — no manual data entry, no leads lost in DMs.",
+    desc: "Every lead auto-tagged, followed up and dropped into your pipeline within minutes.",
     metric: "<5min",
     metricLabel: "response time",
   },
   {
     icon: Palette,
     title: "Creative & Content",
-    desc: "Reels, carousels and ad creative shot and edited for the categories that actually convert in interiors, real estate and hospitality.",
+    desc: "Reels, carousels and ad creative shot and edited for categories that convert.",
     metric: "12+",
     metricLabel: "assets / month",
   },
@@ -232,10 +331,18 @@ function Services() {
           </div>
         </Reveal>
 
-        <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-2">
+        <div className="mt-14 grid gap-4 md:grid-cols-3 md:grid-rows-2">
           {services.map((s, i) => (
-            <Reveal key={s.title} delay={i * 80}>
-              <div className="group flex h-full flex-col gap-6 bg-ink p-8 transition-colors hover:bg-ink-panel">
+            <Reveal
+              key={s.title}
+              delay={i * 80}
+              className={s.featured ? "md:col-span-2 md:row-span-2" : ""}
+            >
+              <div
+                className={`group flex h-full flex-col gap-6 rounded-2xl border border-line bg-ink-panel/40 p-8 backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-signal/40 hover:shadow-xl ${
+                  s.featured ? "justify-between" : ""
+                }`}
+              >
                 <div className="flex items-start justify-between">
                   <div
                     className="flex h-11 w-11 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
@@ -357,7 +464,7 @@ function WhyChooseTeaser() {
             {whyPoints.map((p) => (
               <div
                 key={p}
-                className="flex items-center gap-3 rounded-xl border border-line bg-ink p-4"
+                className="flex items-center gap-3 rounded-xl border border-line bg-ink/80 p-4 backdrop-blur-sm"
               >
                 <CheckCircle2 className="h-4 w-4 shrink-0 text-signal" strokeWidth={2} />
                 <span className="text-sm text-paper/70">{p}</span>
@@ -372,10 +479,10 @@ function WhyChooseTeaser() {
 
 // ---------- Results ----------
 const resultStats = [
-  { value: "₹42L+", label: "pipeline value tracked / month" },
-  { value: "3.2x", label: "average return on ad spend" },
-  { value: "68%", label: "leads auto-qualified before handoff" },
-  { value: "18", label: "Hyderabad brands live right now" },
+  { end: 42, prefix: "₹", suffix: "L+", label: "pipeline value tracked / month" },
+  { end: 3.2, decimals: 1, suffix: "x", label: "average return on ad spend" },
+  { end: 68, suffix: "%", label: "leads auto-qualified before handoff" },
+  { end: 18, suffix: "", label: "Hyderabad brands live right now" },
 ];
 
 function Results() {
@@ -395,9 +502,16 @@ function Results() {
         <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
           {resultStats.map((s, i) => (
             <Reveal key={s.label} delay={i * 70}>
-              <div className="group relative h-full bg-ink p-8 transition-colors hover:bg-ink-panel">
+              <div className="group relative h-full bg-ink-panel/30 p-8 backdrop-blur-sm transition-colors hover:bg-ink-panel">
                 <TrendingUp className="h-4 w-4 text-signal/40 transition-colors group-hover:text-signal" strokeWidth={1.75} />
-                <div className="mt-4 font-mono text-4xl text-signal">{s.value}</div>
+                <div className="mt-4 font-mono text-4xl text-signal">
+                  <CountUp
+                    end={s.end}
+                    decimals={s.decimals ?? 0}
+                    prefix={s.prefix ?? ""}
+                    suffix={s.suffix}
+                  />
+                </div>
                 <div className="mt-3 text-sm leading-snug text-paper/60">{s.label}</div>
               </div>
             </Reveal>
@@ -446,7 +560,7 @@ function PortfolioTeaser() {
             <Reveal key={p.title} delay={i * 80}>
               <Link
                 href="/portfolio"
-                className="group block h-full rounded-2xl border border-dashed border-line bg-ink-panel/30 p-6 transition-all hover:-translate-y-1 hover:border-signal/40"
+                className="group block h-full rounded-2xl border border-dashed border-line bg-ink-panel/30 p-6 backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-signal/40"
               >
                 <span className="font-mono text-[10px] uppercase tracking-wider text-paper/40">
                   {p.tag}
@@ -514,7 +628,7 @@ function CTA() {
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <div
-            className="relative overflow-hidden rounded-2xl border p-10 md:p-14"
+            className="relative overflow-hidden rounded-2xl border p-10 backdrop-blur-sm md:p-14"
             style={{
               borderImage: "linear-gradient(135deg, var(--signal), var(--teal)) 1",
               background: "var(--ink-panel)",
@@ -593,10 +707,10 @@ function CTA() {
 
               <div className="flex w-full flex-col gap-3 md:w-auto md:min-w-[280px]">
                 <a
-                  href="https://wa.me/91XXXXXXXXXX"
+                  href={WHATSAPP_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center justify-between gap-4 rounded-full px-6 py-3 font-mono text-[13px] uppercase tracking-wider text-white transition-transform hover:scale-[1.02]"
+                  className="group flex items-center justify-between gap-4 rounded-full px-6 py-3 font-mono text-[13px] uppercase tracking-wider text-white shadow-lg transition-transform hover:scale-[1.02]"
                   style={{ background: "linear-gradient(90deg, var(--signal), var(--teal))" }}
                 >
                   <span className="flex items-center gap-2">

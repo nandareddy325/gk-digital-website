@@ -17,16 +17,17 @@ const primaryLinks = [
 
 const moreLinks = [
   { label: "Portfolio", href: "/portfolio" },
-  { label: "Case Studies", href: "/case-studies" },
   { label: "Blog", href: "/blog" },
-  { label: "Careers", href: "/careers" },
-  { label: "Hyderabad", href: "/locations/hyderabad" },
+  { label: "Process", href: "/process" },
+  { label: "Why Choose Us", href: "/why-choose-us" },
+  { label: "Testimonials", href: "/testimonials" },
+  { label: "FAQ", href: "/faq" },
 ];
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false); // mobile menu
-  const [moreOpen, setMoreOpen] = useState(false); // desktop "More" dropdown
-  const [mobileMoreOpen, setMobileMoreOpen] = useState(false); // mobile "More" accordion
+  const [open, setOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
   const pathname = usePathname();
   const dropdownRef = useRef<HTMLLIElement>(null);
 
@@ -37,7 +38,6 @@ export default function Navbar() {
 
   const isMoreActive = moreLinks.some((link) => isActive(link.href));
 
-  // Close desktop dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (
@@ -51,7 +51,6 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Close dropdown on route change
   useEffect(() => {
     setMoreOpen(false);
     setOpen(false);
@@ -61,7 +60,6 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-[0_1px_0_rgba(15,23,42,0.04)]">
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-1.5 sm:px-6 lg:grid lg:grid-cols-[auto_auto_1fr_auto] lg:gap-0 lg:py-2">
-        {/* Logo */}
         <Link
           href="/"
           className="flex shrink-0 items-center"
@@ -69,19 +67,18 @@ export default function Navbar() {
         >
           <div className="relative h-11 w-[140px] sm:h-11 sm:w-[155px] lg:h-13 lg:w-[180px] xl:h-15 xl:w-[200px]">
             <Image
-              src="/GK_Digital_Logo.png"
+              src="/GK_Digital_Logo.jpg"
               alt="GK Digital Solutions"
               fill
+              sizes="(max-width: 1024px) 155px, 200px"
               className="object-contain object-left"
               priority
             />
           </div>
         </Link>
 
-        {/* Hairline divider */}
         <div className="mx-4 hidden h-6 w-px bg-slate-200 lg:mx-6 xl:mx-8 lg:block" />
 
-        {/* Center nav links */}
         <ul className="hidden items-center justify-center gap-0.5 lg:flex xl:gap-1">
           {primaryLinks.map((link) => {
             const active = isActive(link.href);
@@ -101,7 +98,6 @@ export default function Navbar() {
             );
           })}
 
-          {/* More dropdown — last item */}
           <li ref={dropdownRef} className="relative shrink-0">
             <button
               type="button"
@@ -146,11 +142,10 @@ export default function Navbar() {
           </li>
         </ul>
 
-        {/* Right: divider + CTA + mobile toggle */}
         <div className="flex shrink-0 items-center justify-end gap-3">
           <div className="mx-1 hidden h-6 w-px bg-slate-200 lg:mx-2 lg:block" />
           <Link
-            href="/get-audit"
+            href="/contact"
             className="hidden shrink-0 whitespace-nowrap rounded-full bg-slate-900 px-4 py-2 font-mono text-[13px] font-medium uppercase tracking-[0.1em] text-white transition-colors hover:bg-[#4C8F2A] lg:block xl:px-5 xl:text-[14px] xl:tracking-[0.12em]"
           >
             Get audit
@@ -172,7 +167,6 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile / tablet menu (below lg) */}
       {open && (
         <div className="max-h-[calc(100vh-56px)] overflow-y-auto border-t border-slate-200 bg-white px-4 py-5 sm:px-6 lg:hidden">
           <ul className="flex flex-col gap-1">
@@ -195,7 +189,6 @@ export default function Navbar() {
               );
             })}
 
-            {/* More accordion — last item */}
             <li>
               <button
                 type="button"
@@ -242,7 +235,7 @@ export default function Navbar() {
           </ul>
 
           <Link
-            href="/get-audit"
+            href="/contact"
             onClick={() => setOpen(false)}
             className="mt-6 block rounded-full bg-slate-900 px-4 py-2.5 text-center font-mono text-[12px] font-medium uppercase tracking-[0.12em] text-white"
           >
