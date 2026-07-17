@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowUpRight,
   Target,
@@ -28,68 +29,24 @@ const stats = [
 ];
 
 const values = [
-  {
-    icon: ShieldCheck,
-    title: "Transparency",
-    desc: "Clear reporting, honest timelines, no vanity metrics.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Results-First Thinking",
-    desc: "Every campaign is built around ROI, not just impressions.",
-  },
-  {
-    icon: Lightbulb,
-    title: "Creativity with Purpose",
-    desc: "Bold ideas that are grounded in strategy, not guesswork.",
-  },
-  {
-    icon: Heart,
-    title: "Client Partnership",
-    desc: "We grow when you grow — your success is the scoreboard.",
-  },
-  {
-    icon: RefreshCw,
-    title: "Continuous Learning",
-    desc: "We stay ahead of algorithm changes, platform trends, and consumer behavior.",
-  },
+  { icon: ShieldCheck, title: "Transparency", desc: "Clear reporting, honest timelines, no vanity metrics." },
+  { icon: TrendingUp, title: "Results-First Thinking", desc: "Every campaign is built around ROI, not just impressions." },
+  { icon: Lightbulb, title: "Creativity with Purpose", desc: "Bold ideas that are grounded in strategy, not guesswork." },
+  { icon: Heart, title: "Client Partnership", desc: "We grow when you grow — your success is the scoreboard." },
+  { icon: RefreshCw, title: "Continuous Learning", desc: "We stay ahead of algorithm changes, platform trends, and consumer behavior." },
 ];
 
 const differentiators = [
-  {
-    icon: Target,
-    title: "Strategy First",
-    desc: "We don't believe in one-size-fits-all packages. Every business gets a strategy built around their specific goals and audience.",
-  },
-  {
-    icon: Lightbulb,
-    title: "Data + Creativity",
-    desc: "Our team blends analytical thinking with creative execution, so campaigns aren't just data-driven — they're memorable.",
-  },
-  {
-    icon: Users,
-    title: "One Team, Every Channel",
-    desc: "Strategists, creators, designers and developers working together, so your brand stays consistent everywhere it shows up.",
-  },
+  { icon: Target, title: "Strategy First", desc: "We don't believe in one-size-fits-all packages. Every business gets a strategy built around their specific goals and audience." },
+  { icon: Lightbulb, title: "Data + Creativity", desc: "Our team blends analytical thinking with creative execution, so campaigns aren't just data-driven — they're memorable." },
+  { icon: Users, title: "One Team, Every Channel", desc: "Strategists, creators, designers and developers working together, so your brand stays consistent everywhere it shows up." },
 ];
 
 const team = [
-  {
-    role: "Strategy & Growth",
-    desc: "Audits accounts, builds channel roadmaps, and owns the numbers behind every campaign.",
-  },
-  {
-    role: "Paid Media",
-    desc: "Runs and optimizes Google, Meta and WhatsApp campaigns against real close rates, not just clicks.",
-  },
-  {
-    role: "Creative & Content",
-    desc: "Shoots, edits and writes the assets that make campaigns stop the scroll.",
-  },
-  {
-    role: "Web & CRM",
-    desc: "Builds the websites, landing pages and CRM pipelines that turn traffic into tracked leads.",
-  },
+  { role: "Strategy & Growth", desc: "Audits accounts, builds channel roadmaps, and owns the numbers behind every campaign." },
+  { role: "Paid Media", desc: "Runs and optimizes Google, Meta and WhatsApp campaigns against real close rates, not just clicks." },
+  { role: "Creative & Content", desc: "Shoots, edits and writes the assets that make campaigns stop the scroll." },
+  { role: "Web & CRM", desc: "Builds the websites, landing pages and CRM pipelines that turn traffic into tracked leads." },
 ];
 
 export default function AboutPage() {
@@ -97,14 +54,8 @@ export default function AboutPage() {
     <main className="pt-32">
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-line py-24">
-        <div
-          className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-signal/10 blur-3xl"
-          aria-hidden="true"
-        />
-        <div
-          className="pointer-events-none absolute -left-32 bottom-0 h-72 w-72 rounded-full bg-teal/10 blur-3xl"
-          aria-hidden="true"
-        />
+        <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-signal/10 blur-3xl" aria-hidden="true" />
+        <div className="pointer-events-none absolute -left-32 bottom-0 h-72 w-72 rounded-full bg-teal/10 blur-3xl" aria-hidden="true" />
         <div className="relative mx-auto max-w-4xl px-6">
           <Reveal>
             <span className="inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-paper/50">
@@ -137,12 +88,8 @@ export default function AboutPage() {
             <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
               {stats.map((s) => (
                 <div key={s.label}>
-                  <div className="font-display text-3xl font-semibold text-signal md:text-4xl">
-                    {s.value}
-                  </div>
-                  <div className="mt-1 text-xs leading-snug text-paper/50">
-                    {s.label}
-                  </div>
+                  <div className="font-display text-3xl font-semibold text-signal md:text-4xl">{s.value}</div>
+                  <div className="mt-1 text-xs leading-snug text-paper/50">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -150,17 +97,26 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Story */}
+      {/* Story + Team image */}
       <section className="border-b border-line py-20">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-[0.8fr_1fr]">
+        <div className="mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-2 md:items-center">
           <Reveal>
-            <h2 className="font-display text-2xl font-semibold text-paper md:text-3xl">
-              Our story
-            </h2>
+            <div className="relative h-72 w-full overflow-hidden rounded-2xl border border-line md:h-96">
+              <Image
+                src="/team-collaboration.png"
+                alt="GK Digital Solutions team collaborating"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </div>
           </Reveal>
           <div className="space-y-5">
             <Reveal delay={80}>
-              <p className="leading-relaxed text-paper/70">
+              <h2 className="font-display text-2xl font-semibold text-paper md:text-3xl">
+                Our story
+              </h2>
+              <p className="mt-4 leading-relaxed text-paper/70">
                 GK Digital Solutions was founded on a simple belief:
                 businesses deserve marketing that actually works, not just
                 marketing that looks good on paper. We saw too many
@@ -174,9 +130,7 @@ export default function AboutPage() {
                 Today, we&apos;re a full-service digital growth partner,
                 helping businesses across multiple industries build
                 stronger online visibility, generate qualified leads, and
-                convert digital attention into real revenue. We combine
-                technical expertise with creative thinking, and we measure
-                our success the same way you do — by results.
+                convert digital attention into real revenue.
               </p>
             </Reveal>
             <Reveal delay={240}>
@@ -190,36 +144,58 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Mission & Vision */}
+      {/* Mission & Vision with images */}
       <section className="border-b border-line py-20">
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid gap-6 md:grid-cols-2">
             <Reveal>
-              <div className="h-full rounded-2xl border border-line bg-ink-panel/40 p-8">
-                <Target className="h-6 w-6 text-signal" strokeWidth={1.5} />
-                <h3 className="mt-5 font-display text-xl font-semibold text-paper">
-                  Our Mission
-                </h3>
-                <p className="mt-3 leading-relaxed text-paper/60">
-                  To empower businesses of every size with data-driven
-                  digital marketing strategies that generate real,
-                  measurable growth — more visibility, more leads, and
-                  more revenue — through honest work and creative
-                  excellence.
-                </p>
+              <div className="h-full overflow-hidden rounded-2xl border border-line bg-ink-panel/40">
+                <div className="relative h-48 w-full overflow-hidden bg-ink-panel">
+                  <Image
+                    src="/mission-launch.png"
+                    alt="Our mission"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="p-8">
+                  <Target className="h-6 w-6 text-signal" strokeWidth={1.5} />
+                  <h3 className="mt-5 font-display text-xl font-semibold text-paper">
+                    Our Mission
+                  </h3>
+                  <p className="mt-3 leading-relaxed text-paper/60">
+                    To empower businesses of every size with data-driven
+                    digital marketing strategies that generate real,
+                    measurable growth — more visibility, more leads, and
+                    more revenue — through honest work and creative
+                    excellence.
+                  </p>
+                </div>
               </div>
             </Reveal>
             <Reveal delay={100}>
-              <div className="h-full rounded-2xl border border-line bg-ink-panel/40 p-8">
-                <Eye className="h-6 w-6 text-teal" strokeWidth={1.5} />
-                <h3 className="mt-5 font-display text-xl font-semibold text-paper">
-                  Our Vision
-                </h3>
-                <p className="mt-3 leading-relaxed text-paper/60">
-                  To become the most trusted digital growth partner for
-                  ambitious brands, known for turning digital marketing
-                  budgets into predictable, scalable business results.
-                </p>
+              <div className="h-full overflow-hidden rounded-2xl border border-line bg-ink-panel/40">
+                <div className="relative h-48 w-full overflow-hidden bg-ink-panel">
+                  <Image
+                    src="/values-partnership.png"
+                    alt="Our values"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="p-8">
+                  <Eye className="h-6 w-6 text-teal" strokeWidth={1.5} />
+                  <h3 className="mt-5 font-display text-xl font-semibold text-paper">
+                    Our Vision
+                  </h3>
+                  <p className="mt-3 leading-relaxed text-paper/60">
+                    To become the most trusted digital growth partner for
+                    ambitious brands, known for turning digital marketing
+                    budgets into predictable, scalable business results.
+                  </p>
+                </div>
               </div>
             </Reveal>
           </div>
@@ -238,16 +214,9 @@ export default function AboutPage() {
             {values.map((v, i) => (
               <Reveal key={v.title} delay={i * 60}>
                 <div className="group h-full bg-ink p-8 transition-colors hover:bg-ink-panel">
-                  <v.icon
-                    className="h-6 w-6 text-signal transition-transform group-hover:scale-110"
-                    strokeWidth={1.5}
-                  />
-                  <h3 className="mt-5 font-display text-lg font-semibold text-paper">
-                    {v.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-paper/60">
-                    {v.desc}
-                  </p>
+                  <v.icon className="h-6 w-6 text-signal transition-transform group-hover:scale-110" strokeWidth={1.5} />
+                  <h3 className="mt-5 font-display text-lg font-semibold text-paper">{v.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-paper/60">{v.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -267,16 +236,9 @@ export default function AboutPage() {
             {differentiators.map((d, i) => (
               <Reveal key={d.title} delay={i * 80}>
                 <div className="group h-full bg-ink p-8 transition-colors hover:bg-ink-panel">
-                  <d.icon
-                    className="h-6 w-6 text-signal transition-transform group-hover:scale-110"
-                    strokeWidth={1.5}
-                  />
-                  <h3 className="mt-5 font-display text-lg font-semibold text-paper">
-                    {d.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-paper/60">
-                    {d.desc}
-                  </p>
+                  <d.icon className="h-6 w-6 text-signal transition-transform group-hover:scale-110" strokeWidth={1.5} />
+                  <h3 className="mt-5 font-display text-lg font-semibold text-paper">{d.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-paper/60">{d.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -288,9 +250,7 @@ export default function AboutPage() {
       <section className="border-b border-line py-20">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
-            <h2 className="font-display text-2xl font-semibold text-paper md:text-3xl">
-              Our team
-            </h2>
+            <h2 className="font-display text-2xl font-semibold text-paper md:text-3xl">Our team</h2>
             <p className="mt-4 max-w-2xl leading-relaxed text-paper/60">
               SEO specialists, paid media strategists, content creators,
               graphic designers, web developers, and account managers —
@@ -306,12 +266,8 @@ export default function AboutPage() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-full border border-line font-mono text-xs text-signal">
                     {String(i + 1).padStart(2, "0")}
                   </div>
-                  <h3 className="mt-4 font-display text-base font-semibold text-paper">
-                    {member.role}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-paper/60">
-                    {member.desc}
-                  </p>
+                  <h3 className="mt-4 font-display text-base font-semibold text-paper">{member.role}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-paper/60">{member.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -324,10 +280,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="relative overflow-hidden rounded-2xl border border-line bg-ink-panel p-10 md:p-14">
-              <div
-                className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-signal/10 blur-3xl"
-                aria-hidden="true"
-              />
+              <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-signal/10 blur-3xl" aria-hidden="true" />
               <div className="relative flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
                 <h2 className="font-display text-2xl font-semibold text-paper md:text-3xl">
                   Let&apos;s build something great together.

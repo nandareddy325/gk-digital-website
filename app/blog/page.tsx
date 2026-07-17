@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, Sparkles, Clock } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { blogPosts } from "@/components/data/blog";
@@ -54,35 +55,46 @@ export default function BlogPage() {
               <Reveal key={post.slug} delay={i * 60}>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="group flex h-full flex-col rounded-2xl border border-line bg-ink-panel/30 p-7 transition-all hover:-translate-y-1 hover:border-signal/40 hover:bg-ink-panel"
+                  className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-ink-panel/30 transition-all hover:-translate-y-1 hover:border-signal/40 hover:bg-ink-panel"
                 >
-                  <span
-                    className="w-fit rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-white"
-                    style={{
-                      background:
-                        "linear-gradient(90deg, var(--signal), var(--teal))",
-                    }}
-                  >
-                    {post.category}
-                  </span>
-                  <h2 className="mt-4 font-display text-lg font-semibold leading-snug text-paper">
-                    {post.title}
-                  </h2>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-paper/60">
-                    {post.excerpt}
-                  </p>
-                  <div className="mt-5 flex items-center justify-between border-t border-line pt-4">
-                    <div className="flex items-center gap-3 text-[11px] text-paper/40">
-                      <span>{formatDate(post.date)}</span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" strokeWidth={2} />
-                        {post.readTime}
-                      </span>
-                    </div>
-                    <ArrowUpRight
-                      className="h-4 w-4 text-paper/30 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal"
-                      strokeWidth={2}
+                  <div className="relative h-44 w-full overflow-hidden bg-ink-panel">
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
+                  </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <span
+                      className="w-fit rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-white"
+                      style={{
+                        background:
+                          "linear-gradient(90deg, var(--signal), var(--teal))",
+                      }}
+                    >
+                      {post.category}
+                    </span>
+                    <h2 className="mt-4 font-display text-lg font-semibold leading-snug text-paper">
+                      {post.title}
+                    </h2>
+                    <p className="mt-2 flex-1 text-sm leading-relaxed text-paper/60">
+                      {post.excerpt}
+                    </p>
+                    <div className="mt-5 flex items-center justify-between border-t border-line pt-4">
+                      <div className="flex items-center gap-3 text-[11px] text-paper/40">
+                        <span>{formatDate(post.date)}</span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" strokeWidth={2} />
+                          {post.readTime}
+                        </span>
+                      </div>
+                      <ArrowUpRight
+                        className="h-4 w-4 text-paper/30 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal"
+                        strokeWidth={2}
+                      />
+                    </div>
                   </div>
                 </Link>
               </Reveal>

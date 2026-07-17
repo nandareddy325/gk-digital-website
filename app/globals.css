@@ -2,12 +2,12 @@
 
 :root {
   --ink: #ffffff;
-  --ink-panel: #f5f6f9;
+  --ink-panel: #f6f8fa;
   --paper: #14161f;
-  --signal: #2f7fe0;
+  --signal: #1B54C7;
   --signal-dim: #1b4f9c;
-  --line: #e2e4ea;
-  --teal: #7cb92e;
+  --line: #e5e8ec;
+  --teal: #7AC142;
 
   --font-display: var(--font-space-grotesk);
   --font-body: var(--font-inter);
@@ -29,6 +29,10 @@
 
 * {
   scroll-behavior: smooth;
+}
+
+html {
+  background: #ffffff;
 }
 
 body {
@@ -88,6 +92,8 @@ body {
   animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Use this class on any heading/phrase to get the logo's blue-to-green
+   gradient text effect — e.g. <span className="brand-gradient-text"> */
 .brand-gradient-text {
   background: linear-gradient(90deg, var(--signal), var(--teal));
   -webkit-background-clip: text;

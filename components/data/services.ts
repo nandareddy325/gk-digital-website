@@ -6,6 +6,7 @@ export type ServiceDetail = {
   included: string[];
   metaTitle: string;
   metaDescription: string;
+  image?: string;
 };
 
 export const services: ServiceDetail[] = [
@@ -27,6 +28,7 @@ export const services: ServiceDetail[] = [
     metaTitle: "SEO Services | GK Digital Solutions",
     metaDescription:
       "Rank higher on Google with GK Digital Solutions' SEO services — keyword research, technical audits, content optimization and link building.",
+    image: "/service-seo.png",
   },
   {
     slug: "google-ads",
@@ -46,6 +48,7 @@ export const services: ServiceDetail[] = [
     metaTitle: "Google Ads (PPC) Management | GK Digital Solutions",
     metaDescription:
       "GK Digital Solutions builds and manages Google Ads campaigns that maximize conversions and minimize wasted ad spend.",
+    image: "/service-ads.png",
   },
   {
     slug: "meta-ads",
@@ -64,6 +67,7 @@ export const services: ServiceDetail[] = [
     metaTitle: "Meta & Instagram Ads | GK Digital Solutions",
     metaDescription:
       "Facebook and Instagram ad campaigns built on sharp targeting and scroll-stopping creative, managed by GK Digital Solutions.",
+    image: "/service-ads.png",
   },
   {
     slug: "social-media-marketing",
@@ -101,6 +105,7 @@ export const services: ServiceDetail[] = [
     metaTitle: "Website Design & Development | GK Digital Solutions",
     metaDescription:
       "Responsive, high-performance websites designed and built by GK Digital Solutions to convert visitors into customers.",
+    image: "/service-website-design.png",
   },
   {
     slug: "branding",
@@ -154,6 +159,7 @@ export const services: ServiceDetail[] = [
     metaTitle: "WhatsApp Marketing | GK Digital Solutions",
     metaDescription:
       "Nurture leads and close sales with WhatsApp Business automation, broadcasts and chatbots from GK Digital Solutions.",
+    image: "/service-leadgen-whatsapp.png",
   },
   {
     slug: "email-marketing",
@@ -190,6 +196,7 @@ export const services: ServiceDetail[] = [
     metaTitle: "Lead Generation Services | GK Digital Solutions",
     metaDescription:
       "Predictable pipelines of qualified prospects built with paid ads, landing pages and CRM integration.",
+    image: "/service-leadgen-whatsapp.png",
   },
   {
     slug: "local-seo",

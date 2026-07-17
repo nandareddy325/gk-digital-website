@@ -1,8 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowUpRight,
-  Building2,
-  Stethoscope,
+  Sparkles,
   ShoppingCart,
   GraduationCap,
   UtensilsCrossed,
@@ -10,10 +10,6 @@ import {
   Wrench,
   Briefcase,
   Dumbbell,
-  Sparkles,
-  HeartPulse,
-  Home,
-  Flower2,
   Car,
   Plane,
   PartyPopper,
@@ -26,103 +22,45 @@ export const metadata = {
     "GK Digital Solutions serves real estate, healthcare, hospitals, interior design, spas, e-commerce, education, hospitality, and more with tailored digital marketing strategies.",
 };
 
-// Industries with a `slug` have a dedicated detail page at /industries/[slug]
-// (see components/data/industries.ts). Industries without a slug render as
-// a plain card until a detail page is built for them.
-const industries = [
+// Industries with real generated cover images
+const featuredIndustries = [
   {
-    icon: Building2,
-    title: "Real Estate",
-    desc: "Lead generation and local SEO to fill your property pipeline.",
-    metric: "Local SEO + Ads",
-    slug: "real-estate",
-  },
-  {
-    icon: Home,
+    image: "/industry-interior-design.png",
     title: "Interior Design",
     desc: "Portfolio-driven websites, lead capture and CRM pipelines built for consultation-to-project sales cycles.",
     metric: "Leads → Consultations",
-    slug: "interior-design",
   },
   {
-    icon: Stethoscope,
-    title: "Healthcare & Clinics",
-    desc: "Trust-building content and local visibility for patient acquisition.",
-    metric: "Patient Acquisition",
-    slug: "healthcare",
+    image: "/industry-real-estate.png",
+    title: "Real Estate",
+    desc: "Lead generation and local SEO to fill your property pipeline.",
+    metric: "Local SEO + Ads",
   },
   {
-    icon: HeartPulse,
-    title: "Hospitals",
-    desc: "Reputation management, local SEO and department-wise landing pages that build trust before the first visit.",
+    image: "/industry-healthcare.png",
+    title: "Healthcare & Hospitals",
+    desc: "Trust-building content, reputation management and local visibility for patient acquisition.",
     metric: "Trust & Local Visibility",
   },
   {
-    icon: Flower2,
-    title: "Spa & Wellness Centers",
-    desc: "Instagram-first content, booking funnels and local search visibility for walk-in and appointment growth.",
-    metric: "Bookings + Local",
-  },
-  {
-    icon: ShoppingCart,
-    title: "E-Commerce & Retail",
-    desc: "Performance ads and SEO built for online sales.",
-    metric: "Performance Ads",
-  },
-  {
-    icon: GraduationCap,
-    title: "Education & Coaching",
-    desc: "Enrollment-focused campaigns and content marketing.",
-    metric: "Enrollment Funnels",
-  },
-  {
-    icon: UtensilsCrossed,
+    image: "/industry-hospitality.png",
     title: "Hospitality & Restaurants",
     desc: "Local SEO, social media, and reputation management.",
     metric: "Reputation & Local",
   },
-  {
-    icon: Shirt,
-    title: "Fashion & Lifestyle Brands",
-    desc: "Branding, influencer-style content, and social ads.",
-    metric: "Brand + Social",
-  },
-  {
-    icon: Wrench,
-    title: "Home Services",
-    desc: "Local lead generation and Google Business optimization.",
-    metric: "Local Leads",
-  },
-  {
-    icon: Car,
-    title: "Automotive",
-    desc: "Showroom footfall and service-booking campaigns backed by local search and social proof.",
-    metric: "Footfall + Bookings",
-  },
-  {
-    icon: Plane,
-    title: "Travel & Tourism",
-    desc: "Destination-focused content, seasonal campaigns and booking-funnel optimization.",
-    metric: "Bookings + Content",
-  },
-  {
-    icon: PartyPopper,
-    title: "Weddings & Events",
-    desc: "Portfolio-led social growth and inquiry funnels built around visual storytelling.",
-    metric: "Inquiries + Portfolio",
-  },
-  {
-    icon: Briefcase,
-    title: "B2B & SaaS",
-    desc: "LinkedIn strategy, content marketing, and lead nurturing funnels.",
-    metric: "LinkedIn + Content",
-  },
-  {
-    icon: Dumbbell,
-    title: "Fitness & Wellness",
-    desc: "Membership-driven social campaigns and local SEO.",
-    metric: "Membership Growth",
-  },
+];
+
+// Remaining industries — icon-based (no generated image yet)
+const iconIndustries = [
+  { icon: ShoppingCart, title: "E-Commerce & Retail", desc: "Performance ads and SEO built for online sales.", metric: "Performance Ads" },
+  { icon: GraduationCap, title: "Education & Coaching", desc: "Enrollment-focused campaigns and content marketing.", metric: "Enrollment Funnels" },
+  { icon: Shirt, title: "Fashion & Lifestyle Brands", desc: "Branding, influencer-style content, and social ads.", metric: "Brand + Social" },
+  { icon: Wrench, title: "Home Services", desc: "Local lead generation and Google Business optimization.", metric: "Local Leads" },
+  { icon: Car, title: "Automotive", desc: "Showroom footfall and service-booking campaigns backed by local search and social proof.", metric: "Footfall + Bookings" },
+  { icon: Plane, title: "Travel & Tourism", desc: "Destination-focused content, seasonal campaigns and booking-funnel optimization.", metric: "Bookings + Content" },
+  { icon: PartyPopper, title: "Weddings & Events", desc: "Portfolio-led social growth and inquiry funnels built around visual storytelling.", metric: "Inquiries + Portfolio" },
+  { icon: Briefcase, title: "B2B & SaaS", desc: "LinkedIn strategy, content marketing, and lead nurturing funnels.", metric: "LinkedIn + Content" },
+  { icon: Dumbbell, title: "Fitness & Wellness", desc: "Membership-driven social campaigns and local SEO.", metric: "Membership Growth" },
 ];
 
 export default function IndustriesPage() {
@@ -157,18 +95,56 @@ export default function IndustriesPage() {
         </div>
       </section>
 
-      {/* Industries grid */}
+      {/* Featured industries with images */}
       <section className="border-b border-line py-20">
         <div className="mx-auto max-w-6xl px-6">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {industries.map((ind, i) => {
-              const cardContent = (
-                <>
+          <div className="grid gap-6 sm:grid-cols-2">
+            {featuredIndustries.map((ind, i) => (
+              <Reveal key={ind.title} delay={i * 70}>
+                <div className="group h-full overflow-hidden rounded-2xl border border-line bg-ink-panel/30 transition-all hover:-translate-y-1 hover:border-signal/40 hover:shadow-xl">
+                  <div className="relative h-48 w-full overflow-hidden bg-ink-panel">
+                    <Image
+                      src={ind.image}
+                      alt={ind.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-7">
+                    <h3 className="font-display text-lg font-semibold text-paper">
+                      {ind.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-paper/60">
+                      {ind.desc}
+                    </p>
+                    <span className="mt-4 inline-block font-mono text-[10px] uppercase tracking-wider text-signal">
+                      {ind.metric}
+                    </span>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Remaining industries — icon grid */}
+      <section className="border-b border-line py-20">
+        <div className="mx-auto max-w-6xl px-6">
+          <Reveal>
+            <h2 className="font-display text-2xl font-semibold text-paper">
+              More industries we work with
+            </h2>
+          </Reveal>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {iconIndustries.map((ind, i) => (
+              <Reveal key={ind.title} delay={(i % 6) * 60}>
+                <div className="group h-full rounded-2xl border border-line bg-ink-panel/30 p-7 transition-all hover:-translate-y-1 hover:border-signal/40 hover:bg-ink-panel">
                   <div
                     className="flex h-11 w-11 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
                     style={{
-                      background:
-                        "linear-gradient(135deg, var(--signal), var(--teal))",
+                      background: "linear-gradient(135deg, var(--signal), var(--teal))",
                     }}
                   >
                     <ind.icon className="h-5 w-5 text-white" strokeWidth={1.75} />
@@ -179,35 +155,12 @@ export default function IndustriesPage() {
                   <p className="mt-2 text-sm leading-relaxed text-paper/60">
                     {ind.desc}
                   </p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="font-mono text-[10px] uppercase tracking-wider text-signal">
-                      {ind.metric}
-                    </span>
-                    {ind.slug && (
-                      <ArrowUpRight
-                        className="h-4 w-4 text-paper/40 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal"
-                        strokeWidth={2}
-                      />
-                    )}
-                  </div>
-                </>
-              );
-
-              const cardClass =
-                "group h-full rounded-2xl border border-line bg-ink-panel/30 p-7 transition-all hover:-translate-y-1 hover:border-signal/40 hover:bg-ink-panel";
-
-              return (
-                <Reveal key={ind.title} delay={(i % 6) * 60}>
-                  {ind.slug ? (
-                    <Link href={`/industries/${ind.slug}`} className={cardClass}>
-                      {cardContent}
-                    </Link>
-                  ) : (
-                    <div className={cardClass}>{cardContent}</div>
-                  )}
-                </Reveal>
-              );
-            })}
+                  <span className="mt-4 inline-block font-mono text-[10px] uppercase tracking-wider text-signal">
+                    {ind.metric}
+                  </span>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>

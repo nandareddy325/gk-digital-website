@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter, IBM_Plex_Mono } from "next/font/google";
+import { Libre_Baskerville, Inter, IBM_Plex_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
+const libreBaskerville = Libre_Baskerville({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  weight: ["400", "700"],
+  variable: "--font-space-grotesk", // kept same CSS variable name so no other files need changing
 });
 
 const inter = Inter({
@@ -34,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${plexMono.variable}`}
+      className={`${libreBaskerville.variable} ${inter.variable} ${plexMono.variable}`}
       suppressHydrationWarning
     >
       <body>

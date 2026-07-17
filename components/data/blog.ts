@@ -5,6 +5,7 @@ export type BlogPost = {
   category: string;
   date: string;
   readTime: string;
+  image: string;
   content: string[];
 };
 
@@ -17,6 +18,7 @@ export const blogPosts: BlogPost[] = [
     category: "SEO",
     date: "2026-06-02",
     readTime: "6 min read",
+    image: "/blog-seo-mistakes.png",
     content: [
       "Most businesses don't lose search traffic because of some advanced algorithm change — they lose it to the same handful of avoidable mistakes. Slow page load times top the list. If your site takes more than three seconds to load, a meaningful share of visitors leave before it finishes, and Google notices that bounce.",
       "Missing or duplicate title tags are another common issue. Every page needs a unique, descriptive title that tells both users and search engines what the page is about — generic titles like 'Home' or 'Services' waste valuable ranking real estate.",
@@ -33,6 +35,7 @@ export const blogPosts: BlogPost[] = [
     category: "Paid Ads",
     date: "2026-06-09",
     readTime: "5 min read",
+    image: "/blog-ads-comparison.png",
     content: [
       "Google Ads captures demand that already exists. Someone searching 'interior designer near me' has already decided they want the service — your ad just needs to convince them you're the right choice. This makes Google Ads especially strong for high-intent, transactional searches.",
       "Facebook and Instagram Ads work differently — they create demand by interrupting a scroll with something visually compelling. Nobody is actively searching, so the creative and targeting have to do more work to spark interest.",
@@ -48,6 +51,7 @@ export const blogPosts: BlogPost[] = [
     category: "Local SEO",
     date: "2026-06-16",
     readTime: "5 min read",
+    image: "/blog-google-business-profile.png",
     content: [
       "Start with completeness. Every field Google gives you — business category, service area, hours, attributes, products — should be filled in accurately. Incomplete profiles are a common reason businesses don't show up in the local 3-pack.",
       "Category selection matters more than most businesses realize. Choose the most specific primary category available, and add relevant secondary categories rather than relying on one broad label.",
@@ -64,6 +68,7 @@ export const blogPosts: BlogPost[] = [
     category: "Lead Generation",
     date: "2026-06-23",
     readTime: "7 min read",
+    image: "/blog-lead-funnel-guide.png",
     content: [
       "A working lead funnel has four connected parts: an ad or organic entry point, a landing page built for one specific action, a follow-up sequence, and a tracking system that shows what actually closes — not just what generates clicks.",
       "The landing page is where most funnels fail. A page trying to explain everything about a business rarely converts as well as a page focused on one offer, one form, and one clear next step.",
@@ -80,6 +85,7 @@ export const blogPosts: BlogPost[] = [
     category: "Web Design",
     date: "2026-06-30",
     readTime: "4 min read",
+    image: "/blog-website-redesign.png",
     content: [
       "If your bounce rate is climbing on mobile specifically, that's usually a design and speed problem, not a content problem. Over half of web traffic is mobile now, and a site that isn't built mobile-first will keep losing visitors.",
       "A second sign is stagnant or falling conversion rates even as traffic holds steady — visitors are arriving but not taking action, which often points to unclear calls-to-action or a confusing layout.",
@@ -96,6 +102,7 @@ export const blogPosts: BlogPost[] = [
     category: "WhatsApp Marketing",
     date: "2026-07-07",
     readTime: "5 min read",
+    image: "/blog-whatsapp-marketing.png",
     content: [
       "WhatsApp messages get opened at a much higher rate than email, and far faster too — most get read within minutes. That makes it a strong channel for time-sensitive offers, appointment reminders, and lead follow-up.",
       "The foundation is a WhatsApp Business account with a complete catalog, business hours, and quick-reply templates — small details that make the account feel professional rather than like a personal chat.",

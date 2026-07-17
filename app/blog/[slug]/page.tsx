@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowUpRight, ArrowLeft, Clock } from "lucide-react";
 import Reveal from "@/components/Reveal";
@@ -33,14 +34,12 @@ export default function BlogPostPage({
   const post = getPostBySlug(params.slug);
   if (!post) return notFound();
 
-  const related = blogPosts
-    .filter((p) => p.slug !== post.slug)
-    .slice(0, 3);
+  const related = blogPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   return (
     <main className="pt-32">
       <article>
-        <section className="relative overflow-hidden border-b border-line py-20">
+        <section className="relative overflow-hidden border-b border-line py-16">
           <div
             className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-signal/10 blur-3xl"
             aria-hidden="true"
@@ -60,8 +59,7 @@ export default function BlogPostPage({
               <span
                 className="mt-6 inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-white"
                 style={{
-                  background:
-                    "linear-gradient(90deg, var(--signal), var(--teal))",
+                  background: "linear-gradient(90deg, var(--signal), var(--teal))",
                 }}
               >
                 {post.category}
@@ -86,6 +84,23 @@ export default function BlogPostPage({
           </div>
         </section>
 
+        <section className="border-b border-line py-10">
+          <div className="mx-auto max-w-4xl px-6">
+            <Reveal>
+              <div className="relative h-64 w-full overflow-hidden rounded-2xl border border-line md:h-96">
+                <Image
+                  src={post.image}
+                  alt={post.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 800px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
         <section className="border-b border-line py-16">
           <div className="mx-auto max-w-3xl px-6">
             <Reveal>
@@ -101,7 +116,6 @@ export default function BlogPostPage({
         </section>
       </article>
 
-      {/* Related posts */}
       {related.length > 0 && (
         <section className="border-b border-line py-20">
           <div className="mx-auto max-w-6xl px-6">
@@ -110,25 +124,36 @@ export default function BlogPostPage({
                 More from the blog
               </h2>
             </Reveal>
-            <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-3">
+            <div className="mt-8 grid gap-6 md:grid-cols-3">
               {related.map((p, i) => (
                 <Reveal key={p.slug} delay={i * 80}>
                   <Link
                     href={`/blog/${p.slug}`}
-                    className="group flex h-full flex-col justify-between gap-4 bg-ink p-6 transition-colors hover:bg-ink-panel"
+                    className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-ink transition-colors hover:bg-ink-panel"
                   >
-                    <div>
-                      <span className="font-mono text-[10px] uppercase tracking-wider text-signal">
-                        {p.category}
-                      </span>
-                      <h3 className="mt-2 font-display text-base font-semibold text-paper">
-                        {p.title}
-                      </h3>
+                    <div className="relative h-32 w-full overflow-hidden bg-ink-panel">
+                      <Image
+                        src={p.image}
+                        alt={p.title}
+                        fill
+                        sizes="33vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
                     </div>
-                    <ArrowUpRight
-                      className="h-4 w-4 text-paper/30 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal"
-                      strokeWidth={2}
-                    />
+                    <div className="flex flex-1 flex-col justify-between gap-4 p-6">
+                      <div>
+                        <span className="font-mono text-[10px] uppercase tracking-wider text-signal">
+                          {p.category}
+                        </span>
+                        <h3 className="mt-2 font-display text-base font-semibold text-paper">
+                          {p.title}
+                        </h3>
+                      </div>
+                      <ArrowUpRight
+                        className="h-4 w-4 text-paper/30 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal"
+                        strokeWidth={2}
+                      />
+                    </div>
                   </Link>
                 </Reveal>
               ))}
@@ -137,7 +162,6 @@ export default function BlogPostPage({
         </section>
       )}
 
-      {/* CTA */}
       <section className="py-20">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>

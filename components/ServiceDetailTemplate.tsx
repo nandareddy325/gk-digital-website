@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, Check, Sparkles } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { services, type ServiceDetail } from "./data/services";
@@ -76,6 +77,26 @@ export default function ServiceDetailTemplate({
           </Reveal>
         </div>
       </section>
+
+      {/* Hero image, if available */}
+      {service.image && (
+        <section className="border-b border-line py-12">
+          <div className="mx-auto max-w-4xl px-6">
+            <Reveal>
+              <div className="relative h-64 w-full overflow-hidden rounded-2xl border border-line md:h-80">
+                <Image
+                  src={service.image}
+                  alt={service.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 800px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
 
       {/* What's included */}
       <section className="border-b border-line py-20">
