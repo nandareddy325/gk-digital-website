@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import ScrollProgress from "@/components/ScrollProgress";
+import ProcessTimeline from "@/components/ProcessTimeline";
 
 export const metadata = {
   title: "Our Digital Marketing Process | GK Digital Solutions",
@@ -8,79 +10,118 @@ export const metadata = {
     "See how GK Digital Solutions turns strategy into results — our proven 6-step process for SEO, ads, and digital growth campaigns.",
 };
 
-const steps = [
-  { n: "01", title: "Discover", desc: "We start with a deep-dive audit of your business, website, competitors, and target audience to understand exactly where you stand and where the opportunities are." },
-  { n: "02", title: "Strategize", desc: "Using audit insights, we build a custom digital marketing roadmap — choosing the right mix of SEO, paid ads, social, and content based on your goals and budget." },
-  { n: "03", title: "Design & Build", desc: "Our creative and development team builds the assets your strategy needs — from websites and landing pages to ad creatives and content calendars." },
-  { n: "04", title: "Launch & Execute", desc: "We launch campaigns across the selected channels, with careful tracking set up from day one so every action is measurable." },
-  { n: "05", title: "Optimize & Scale", desc: "We continuously monitor performance, run A/B tests, and refine targeting, creative, and budget allocation to improve results month over month." },
-  { n: "06", title: "Report & Review", desc: "You receive clear, jargon-free monthly reports along with strategy calls to review performance and plan the next phase of growth." },
-];
+/* Fluid type scale — continuous clamp() scaling, matches the rest of the site */
+const fluid = {
+  hero: "text-[clamp(1.85rem,5.6vw,3.25rem)] leading-[1.18]",
+  h2: "text-[clamp(1.4rem,4vw,2.25rem)] leading-[1.2]",
+  lead: "text-[clamp(0.95rem,1.8vw,1.125rem)] leading-relaxed",
+  eyebrow: "text-[clamp(0.625rem,1.3vw,0.75rem)] tracking-[0.18em]",
+};
 
 export default function ProcessPage() {
   return (
-    <main className="pt-32">
-      <section className="relative overflow-hidden border-b border-line py-20">
+    <main className="overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
+      <ScrollProgress />
+      <style>{`
+        @keyframes mesh-drift {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(-4%, 3%) scale(1.08); }
+        }
+        .mesh-blob { animation: mesh-drift 14s ease-in-out infinite; }
+        @keyframes icon-float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-3px); }
+        }
+        .icon-float { animation: icon-float 3.4s ease-in-out infinite; }
+        @keyframes border-glow { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+        .cta-border-glow { animation: border-glow 4s ease-in-out infinite; }
+        @keyframes shimmer-sweep {
+          0% { transform: translateX(-120%) skewX(-15deg); }
+          100% { transform: translateX(220%) skewX(-15deg); }
+        }
+        .shimmer-btn::after {
+          content: "";
+          position: absolute;
+          top: 0; left: 0;
+          width: 30%; height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+          animation: shimmer-sweep 3.2s ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .mesh-blob, .icon-float, .cta-border-glow, .shimmer-btn::after { animation: none !important; }
+        }
+      `}</style>
+
+      {/* Hero */}
+      <section className="relative overflow-hidden border-b border-line py-16 sm:py-20">
         <div
-          className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-signal/10 blur-3xl"
+          className="mesh-blob pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full opacity-20 blur-3xl sm:-right-32 sm:-top-32 sm:h-96 sm:w-96"
+          style={{ background: "linear-gradient(135deg, var(--signal), var(--teal))" }}
           aria-hidden="true"
         />
-        <div className="relative mx-auto max-w-3xl px-6">
+        <div className="relative mx-auto max-w-3xl min-w-0 px-5 sm:px-6">
           <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-paper/50">
-              <Sparkles className="h-3 w-3" strokeWidth={2} />
+            <span className={`inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 font-mono uppercase text-paper/50 ${fluid.eyebrow}`}>
+              <Sparkles className="icon-float h-3 w-3" strokeWidth={2} />
               Our process
             </span>
           </Reveal>
           <Reveal delay={80}>
-            <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-paper md:text-5xl">
+            <h1 className={`mt-5 break-words font-display font-semibold tracking-tight text-paper ${fluid.hero}`}>
               A proven process built for predictable growth.
             </h1>
+          </Reveal>
+          <Reveal delay={160}>
+            <p className={`mt-4 max-w-xl text-paper/60 sm:mt-5 ${fluid.lead}`}>
+              Six stages, repeated every month — not a one-time setup we
+              walk away from. Each step feeds the next, from first audit
+              to your next strategy call.
+            </p>
+          </Reveal>
+          <Reveal delay={220}>
+            <p className="mt-3 text-xs text-paper/35 sm:mt-4">
+              Scroll down — the timeline fills in as you go.
+            </p>
           </Reveal>
         </div>
       </section>
 
-      <section className="border-b border-line py-20">
-        <div className="mx-auto max-w-4xl px-6">
-          <div className="space-y-10">
-            {steps.map((step, i) => (
-              <Reveal key={step.n} delay={i * 60}>
-                <div className="flex gap-6">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-line font-mono text-sm text-signal">
-                    {step.n}
-                  </div>
-                  <div className="border-b border-line pb-10">
-                    <h3 className="font-display text-xl font-semibold text-paper">
-                      {step.title}
-                    </h3>
-                    <p className="mt-2 leading-relaxed text-paper/60">
-                      {step.desc}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+      {/* Timeline — scroll-triggered animations live in ProcessTimeline */}
+      <section className="relative border-b border-line py-14 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-4xl min-w-0 px-5 sm:px-6">
+          <ProcessTimeline />
         </div>
       </section>
 
-      <section className="py-20">
-        <div className="mx-auto max-w-6xl px-6">
+      {/* CTA */}
+      <section className="py-14 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-6xl min-w-0 px-5 sm:px-6">
           <Reveal>
-            <div className="flex flex-col items-start justify-between gap-6 rounded-2xl border border-line bg-ink-panel p-10 md:flex-row md:items-center">
-              <h2 className="font-display text-2xl font-semibold text-paper md:text-3xl">
-                See our process in action.
-              </h2>
-              <Link
-                href="/contact"
-                className="group flex shrink-0 items-center gap-2 rounded-full bg-signal px-6 py-3 font-mono text-[13px] uppercase tracking-wider text-ink transition-transform hover:scale-[1.03]"
-              >
-                Book your free strategy call
-                <ArrowUpRight
-                  className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  strokeWidth={2}
-                />
-              </Link>
+            <div
+              className="cta-border-glow relative overflow-hidden rounded-2xl border p-6 backdrop-blur-sm sm:p-10"
+              style={{ borderImage: "linear-gradient(135deg, var(--signal), var(--teal)) 1", background: "var(--ink-panel)" }}
+            >
+              <div
+                className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full opacity-20 blur-3xl sm:-right-24 sm:-top-24 sm:h-72 sm:w-72"
+                style={{ background: "linear-gradient(135deg, var(--signal), var(--teal))" }}
+                aria-hidden="true"
+              />
+              <div className="relative flex flex-col items-start justify-between gap-5 md:flex-row md:items-center md:gap-6">
+                <h2 className={`font-display font-semibold text-paper ${fluid.h2}`}>
+                  See our process in action.
+                </h2>
+                <Link
+                  href="/contact"
+                  className="shimmer-btn group relative flex min-h-[46px] w-full shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full px-6 font-mono text-[12px] uppercase tracking-wider text-white transition-transform hover:scale-[1.03] sm:w-auto sm:text-[13px]"
+                  style={{ background: "linear-gradient(90deg, var(--signal), var(--teal))" }}
+                >
+                  <span className="relative">Book your free strategy call</span>
+                  <ArrowUpRight
+                    className="relative h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    strokeWidth={2}
+                  />
+                </Link>
+              </div>
             </div>
           </Reveal>
         </div>
