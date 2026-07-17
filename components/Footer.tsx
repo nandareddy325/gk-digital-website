@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   Zap,
   Award,
+  Lock,
 } from "lucide-react";
 
 function InstagramIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -61,8 +62,8 @@ function WhatsappIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function PlatformBadge({ label }: { label: string }) {
   return (
-    <span className="flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-[11px] text-paper/70">
-      <span className="h-1.5 w-1.5 rounded-full bg-teal" />
+    <span className="flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-[11px] text-paper/70 transition-colors hover:border-signal/40">
+      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-teal blink-dot" />
       {label}
     </span>
   );
@@ -95,10 +96,14 @@ const linkGroups = [
   },
 ];
 
+/* Added "Secure payments via Razorpay" alongside the existing trust badges —
+   forward-looking copy for when online checkout goes live on /pricing. See
+   components/PricingPlans.tsx for the integration hook points. */
 const trustBadges = [
   { icon: ShieldCheck, label: "Transparent reporting" },
   { icon: Zap, label: "24-hr response time" },
   { icon: Award, label: "Results-first strategy" },
+  { icon: Lock, label: "Secure payments via Razorpay" },
 ];
 
 const platforms = ["Google Ads", "Meta Ads", "WhatsApp Business", "Google Business Profile"];
@@ -121,41 +126,85 @@ export default function Footer() {
 
   return (
     <footer className="relative overflow-hidden border-t border-line">
+      <style>{`
+        @keyframes footer-glow {
+          0%, 100% { opacity: 0.5; }
+          50% { opacity: 1; }
+        }
+        .footer-line-glow { animation: footer-glow 4s ease-in-out infinite; }
+        @keyframes mesh-drift {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(-4%, 3%) scale(1.1); }
+        }
+        .footer-blob { animation: mesh-drift 16s ease-in-out infinite; }
+        @keyframes shimmer-sweep {
+          0% { transform: translateX(-120%) skewX(-15deg); }
+          100% { transform: translateX(220%) skewX(-15deg); }
+        }
+        .shimmer-btn::after {
+          content: "";
+          position: absolute;
+          top: 0; left: 0;
+          width: 30%; height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+          animation: shimmer-sweep 3.4s ease-in-out infinite;
+        }
+        @keyframes underline-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+        .footer-underline { position: relative; display: inline-flex; }
+        .footer-underline::after {
+          content: "";
+          position: absolute;
+          left: 0; bottom: -3px;
+          height: 1px;
+          width: 100%;
+          background: linear-gradient(90deg, var(--signal), var(--teal));
+          transform: scaleX(0);
+          transform-origin: left;
+          animation: underline-draw 0.8s ease-out 0.2s forwards;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .footer-line-glow, .footer-blob, .shimmer-btn::after, .footer-underline::after {
+            animation: none !important;
+          }
+        }
+      `}</style>
+
       <div
-        className="absolute top-0 left-40 right-40 h-[1px]"
+        className="footer-line-glow absolute top-0 left-10 right-10 h-[1px] sm:left-40 sm:right-40"
         style={{
           background: "linear-gradient(90deg, var(--signal), var(--teal))",
         }}
       />
       <div
-        className="pointer-events-none absolute -bottom-32 -left-32 h-72 w-72 rounded-full opacity-10 blur-3xl"
+        className="footer-blob pointer-events-none absolute -bottom-32 -left-32 h-72 w-72 rounded-full opacity-10 blur-3xl"
         style={{
           background: "linear-gradient(135deg, var(--signal), var(--teal))",
         }}
         aria-hidden="true"
       />
 
-      <div className="relative border-b border-line py-8">
-        <div className="mx-auto max-w-6xl px-4">
+      {/* Newsletter + trust badges */}
+      <div className="relative border-b border-line py-6 sm:py-8">
+        <div className="mx-auto max-w-6xl min-w-0 px-4 sm:px-6">
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-            <div className="max-w-md">
-              <h3 className="font-display text-lg font-semibold text-paper">
+            <div className="max-w-md min-w-0">
+              <h3 className="font-display text-base font-semibold text-paper sm:text-lg">
                 Get digital marketing tips straight to your inbox.
               </h3>
-              <p className="mt-1 text-xs text-paper/70">
+              <p className="mt-1 text-[11px] text-paper/70 sm:text-xs">
                 One useful email a month — no spam, unsubscribe anytime.
               </p>
             </div>
 
             {subscribed ? (
-              <div className="flex items-center gap-2 rounded-full border border-teal/40 bg-teal/10 px-4 py-2.5 text-sm text-teal">
-                <ShieldCheck className="h-4 w-4" strokeWidth={2} />
+              <div className="flex items-center gap-2 rounded-full border border-teal/40 bg-teal/10 px-4 py-2.5 text-[13px] text-teal sm:text-sm">
+                <ShieldCheck className="h-4 w-4 shrink-0" strokeWidth={2} />
                 Thanks — you&apos;re on the list!
               </div>
             ) : (
               <form
                 onSubmit={handleSubscribe}
-                className="flex w-full max-w-sm gap-2"
+                className="flex w-full max-w-sm min-w-0 flex-col gap-2 sm:flex-row"
               >
                 <input
                   type="email"
@@ -163,31 +212,31 @@ export default function Footer() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@business.com"
-                  className="w-full rounded-full border border-line bg-ink-panel/40 px-4 py-2 text-sm text-paper outline-none transition-colors focus:border-signal/60"
+                  className="w-full min-w-0 rounded-full border border-line bg-ink-panel/40 px-4 py-2.5 text-[13px] text-paper outline-none transition-colors focus:border-signal/60 sm:py-2 sm:text-sm"
                 />
                 <button
                   type="submit"
-                  className="flex shrink-0 items-center gap-1 rounded-full px-4 py-2 font-mono text-[11px] uppercase tracking-wider text-white transition-transform hover:scale-[1.03]"
+                  className="shimmer-btn relative flex min-h-[42px] shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full px-4 py-2 font-mono text-[11px] uppercase tracking-wider text-white transition-transform hover:scale-[1.03]"
                   style={{
                     background:
                       "linear-gradient(90deg, var(--signal), var(--teal))",
                   }}
                 >
-                  Subscribe
-                  <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
+                  <span className="relative">Subscribe</span>
+                  <ArrowUpRight className="relative h-3.5 w-3.5" strokeWidth={2} />
                 </button>
               </form>
             )}
           </div>
 
           <div className="mt-4 flex flex-wrap items-center justify-between gap-y-3 border-t border-line pt-3">
-            <div className="flex flex-wrap gap-x-6 gap-y-2">
+            <div className="flex flex-wrap gap-x-5 gap-y-2 sm:gap-x-6">
               {trustBadges.map((b) => (
                 <div
                   key={b.label}
-                  className="flex items-center gap-1.5 text-xs text-paper/70"
+                  className="flex items-center gap-1.5 text-[11px] text-paper/70 sm:text-xs"
                 >
-                  <b.icon className="h-3.5 w-3.5 text-signal" strokeWidth={2} />
+                  <b.icon className="h-3.5 w-3.5 shrink-0 text-signal" strokeWidth={2} />
                   {b.label}
                 </div>
               ))}
@@ -202,11 +251,12 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="relative py-10">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.1fr_0.8fr_0.9fr_1fr]">
-            <div className="max-w-xs">
-              <div className="relative h-16 w-40">
+      {/* Main footer grid */}
+      <div className="relative py-8 sm:py-10">
+        <div className="mx-auto max-w-6xl min-w-0 px-4 sm:px-6">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-[1.1fr_0.8fr_0.9fr_1fr]">
+            <div className="min-w-0 max-w-xs">
+              <div className="relative h-14 w-36 sm:h-16 sm:w-40">
                 <Image
                   src="/GK_Digital_Logo.jpg"
                   alt="GK Digital Solutions"
@@ -215,24 +265,25 @@ export default function Footer() {
                   className="object-contain object-left"
                 />
               </div>
-              <p className="mt-2.5 text-xs leading-relaxed text-paper/70">
-                Performance marketing and CRM systems for interior design
-                and service businesses that want to know exactly where
-                every rupee of ad spend goes.
+              <p className="mt-2.5 text-[11px] leading-relaxed text-paper/70 sm:text-xs">
+                Performance marketing and CRM systems for interior design,
+                real estate, hospitality, skin &amp; hair and service
+                businesses that want to know exactly where every rupee of
+                ad spend goes.
               </p>
             </div>
 
             {linkGroups.map((group) => (
-              <div key={group.title}>
-                <h4 className="font-mono text-[10px] uppercase tracking-wider text-paper/60">
+              <div key={group.title} className="min-w-0">
+                <h4 className="footer-underline font-mono text-[10px] uppercase tracking-wider text-paper/60">
                   {group.title}
                 </h4>
-                <ul className="mt-3 space-y-2">
+                <ul className="mt-3.5 space-y-2 sm:mt-3">
                   {group.links.map((item) => (
                     <li key={item.label}>
                       <Link
                         href={item.href}
-                        className="text-xs text-paper/80 transition-colors hover:text-signal"
+                        className="text-[12px] text-paper/80 transition-colors hover:text-signal sm:text-xs"
                       >
                         {item.label}
                       </Link>
@@ -242,37 +293,37 @@ export default function Footer() {
               </div>
             ))}
 
-            <div>
-              <h4 className="font-mono text-[10px] uppercase tracking-wider text-paper/60">
+            <div className="min-w-0">
+              <h4 className="footer-underline font-mono text-[10px] uppercase tracking-wider text-paper/60">
                 Contact
               </h4>
-              <ul className="mt-3 space-y-2">
+              <ul className="mt-3.5 space-y-2 sm:mt-3">
                 <li>
                   <a
                     href="mailto:hello@gkdigitalsolutions.in"
-                    className="flex items-center gap-2 text-xs text-paper/80 transition-colors hover:text-signal"
+                    className="flex items-center gap-2 text-[12px] text-paper/80 transition-colors hover:text-signal sm:text-xs"
                   >
                     <Mail className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
-                    hello@gkdigitalsolutions.in
+                    <span className="break-all">hello@gkdigitalsolutions.in</span>
                   </a>
                 </li>
                 <li>
                   <a
                     href="tel:+917569622606"
-                    className="flex items-center gap-2 text-xs text-paper/80 transition-colors hover:text-signal"
+                    className="flex items-center gap-2 text-[12px] text-paper/80 transition-colors hover:text-signal sm:text-xs"
                   >
                     <Phone className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
                     +91 75696 22606
                   </a>
                 </li>
-                <li className="flex items-start gap-2 text-xs text-paper/80">
+                <li className="flex items-start gap-2 text-[12px] text-paper/80 sm:text-xs">
                   <MapPin
                     className="mt-0.5 h-3.5 w-3.5 shrink-0"
                     strokeWidth={1.75}
                   />
                   Hyderabad, Telangana
                 </li>
-                <li className="flex items-start gap-2 text-xs text-paper/80">
+                <li className="flex items-start gap-2 text-[12px] text-paper/80 sm:text-xs">
                   <Clock
                     className="mt-0.5 h-3.5 w-3.5 shrink-0"
                     strokeWidth={1.75}
@@ -287,7 +338,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-line text-paper/70 transition-all hover:scale-110 hover:border-signal/60 hover:text-signal"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-paper/70 transition-all hover:scale-110 hover:border-signal/60 hover:text-signal"
                 >
                   <InstagramIcon className="h-3.5 w-3.5" />
                 </a>
@@ -296,7 +347,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn"
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-line text-paper/70 transition-all hover:scale-110 hover:border-signal/60 hover:text-signal"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-paper/70 transition-all hover:scale-110 hover:border-signal/60 hover:text-signal"
                 >
                   <LinkedinIcon className="h-3.5 w-3.5" />
                 </a>
@@ -305,7 +356,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp"
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-line text-paper/70 transition-all hover:scale-110 hover:border-signal/60 hover:text-signal"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-paper/70 transition-all hover:scale-110 hover:border-signal/60 hover:text-signal"
                 >
                   <WhatsappIcon className="h-3.5 w-3.5" />
                 </a>
@@ -313,17 +364,17 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col items-center justify-between gap-2 border-t border-line pt-4 text-[11px] text-paper/60 md:flex-row">
+          <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-line pt-4 text-center text-[10.5px] text-paper/60 sm:text-[11px] md:flex-row md:text-left">
             <span>
               © {new Date().getFullYear()} GK Digital Solutions. All rights
               reserved.
             </span>
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-4 sm:gap-5">
               <span>A GKA1 Enterprises company</span>
               <button
                 onClick={scrollToTop}
                 aria-label="Back to top"
-                className="flex h-7 w-7 items-center justify-center rounded-full border border-line text-paper/70 transition-all hover:-translate-y-0.5 hover:border-signal/60 hover:text-signal"
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line text-paper/70 transition-all hover:-translate-y-0.5 hover:border-signal/60 hover:text-signal"
               >
                 <ArrowUp className="h-3 w-3" strokeWidth={2} />
               </button>
