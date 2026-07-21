@@ -156,7 +156,7 @@ export default function ServicesPage() {
       `}</style>
 
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-line py-16 sm:py-20 md:py-20">
+      <section className="relative overflow-hidden border-b border-line pb-16 sm:pb-20 md:pb-20">
         <div
           className="mesh-blob pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full opacity-20 blur-3xl sm:-right-32 sm:-top-32 sm:h-96 sm:w-96"
           style={{ background: "linear-gradient(135deg, var(--signal), var(--teal))" }}

@@ -40,12 +40,12 @@ export default function BlogPostPage({
   const related = blogPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   return (
-    <main className="relative overflow-x-hidden pt-32">
+    <main className="relative overflow-x-hidden">
       <ScrollProgress />
       <ServicesCursorAura />
 
       <article>
-        <section className="relative overflow-hidden border-b border-line py-16">
+        <section className="relative overflow-hidden border-b border-line pt-28 sm:pt-32 md:pt-40 pb-16">
           <div
             className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-signal/10 blur-3xl"
             aria-hidden="true"

@@ -43,7 +43,7 @@ const previewStructure = [
 
 export default function PortfolioPage() {
   return (
-    <main className="relative overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
+    <main className="relative overflow-x-hidden">
       <ScrollProgress />
       <ServicesCursorAura />
       <style>{`
@@ -77,7 +77,7 @@ export default function PortfolioPage() {
       `}</style>
 
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-line py-16 sm:py-20">
+      <section className="relative overflow-hidden border-b border-line pt-28 sm:pt-32 md:pt-40 pb-16 sm:pb-20">
         <div
           className="mesh-blob pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full opacity-20 blur-3xl sm:-right-32 sm:-top-32 sm:h-96 sm:w-96"
           style={{ background: "linear-gradient(135deg, var(--signal), var(--teal))" }}
