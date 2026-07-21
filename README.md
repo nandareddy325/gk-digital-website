@@ -1,36 +1,73 @@
-# Pricing Page — Premium Upgrade
+<div align="center">
 
-## Em add chesamu
+# 🌐 GK Digital Solutions — Marketing Website
 
-- **Monthly / Yearly toggle** — prices switch live, yearly shows ~17%
-  savings badge
-- **Icons per plan** (Rocket / TrendingUp / Crown)
-- **Comparison table** below the cards — feature-by-feature checklist
-  across all 3 tiers
-- **Mini FAQ strip** (3 pricing-specific questions)
-- **Scroll animations** (uses the `Reveal` component you already have)
-- Hover lift effect on plan cards
-- Gradient "Most popular" badge and button (matches logo colors)
+<p>
+  <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=next.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" />
+</p>
 
-## Install cheyyi
+The public marketing website for **GK Digital Solutions**, a digital marketing agency — built with the Next.js App Router and a custom animation system.
 
-**Requires** `components/Reveal.tsx` to already exist in your project
-(you added this earlier for the About page — if not, let me know and
-I'll re-send it).
+[Live Site](https://gkdigitalsolutions.in)
 
-1. `components/PricingPlans.tsx` → copy into your `components/` folder
-   (this is a NEW file)
-2. `app/pricing/page.tsx` → **replace** your existing file
-3. Restart:
-   ```powershell
-   Remove-Item -Recurse -Force .next
-   npm run dev
-   ```
-4. Hard refresh, go to `/pricing`, try the toggle and scroll down
+</div>
 
-## Note on prices
+---
 
-Prices (₹15,000 / ₹35,000 / ₹65,000 monthly) are still placeholders —
-update the `monthly` and `yearly` numbers in
-`components/PricingPlans.tsx` with your real pricing before publishing
-live.
+## 📋 Overview
+
+A full agency marketing site: service pages, industry-specific landing pages, blog, and pricing — built for performance and conversion, with a distinct visual identity (mesh-blob backgrounds, spotlight card glows, shimmer CTAs) rather than a generic template look.
+
+---
+
+## ✨ Highlights
+
+- **24+ routes** — home, about, 11 service sub-pages, industry pages, blog, pricing, legal pages
+- **Custom animation system** — cursor-tracked spotlight glows, mesh blob drift backgrounds, shimmer buttons, border-glow CTAs, built without a heavy animation library
+- **Fully responsive** — mobile-first layout across every page
+- **Razorpay-ready pricing** — subscription plan cards wired for payment integration
+- **Legal compliance** — Privacy Policy & Terms governed by Hyderabad jurisdiction, Indian law
+
+---
+
+## 🧰 Tech Stack
+
+**Framework:** Next.js (App Router)
+**Styling:** Tailwind CSS v4
+**Language:** TypeScript
+**Hosting:** Vercel
+
+---
+
+## 🚀 Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/nandareddy-dev/gk-digital-website.git
+cd gk-digital-website
+
+# Install dependencies
+npm install
+
+# Run the development server
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view it.
+
+---
+
+## 📄 License
+
+Proprietary — All rights reserved.
+
+---
+
+<div align="center">
+
+Built by [Nanda Kumar Reddy](https://gkdigitalsolutions.in) · GKA1 Enterprises Pvt Ltd
+
+</div>
