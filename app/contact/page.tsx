@@ -4,6 +4,7 @@ import Reveal from "@/components/Reveal";
 import LiveStatusBadge from "@/components/LiveStatusBadge";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import ScrollProgress from "@/components/ScrollProgress";
+import { ServicesCursorAura } from "@/components/ServicesPageInteractive";
 import {
   Mail,
   MapPin,
@@ -113,8 +114,9 @@ const miniFaqs = [
 
 export default function ContactPage() {
   return (
-    <main className="overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
+    <main className="relative overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
       <ScrollProgress />
+      <ServicesCursorAura />
       <style>{`
         @keyframes mesh-drift {
           0%, 100% { transform: translate(0, 0) scale(1); }

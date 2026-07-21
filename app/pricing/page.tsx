@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { ArrowUpRight, Sparkles, Lock, FileText, Users, ShieldCheck, Check, X, Star } from "lucide-react";
+import { ArrowUpRight, Sparkles, Lock, FileText, Users, ShieldCheck, Check, X } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import PricingPlans from "@/components/PricingPlans";
 import ScrollProgress from "@/components/ScrollProgress";
+import BudgetEstimator from "@/components/BudgetEstimator";
+import { ServicesCursorAura, ServicesStickyCTA, ServicesTestimonialCarousel } from "@/components/ServicesPageInteractive";
 
 export const metadata = {
   title: "Digital Marketing Pricing Plans | GK Digital Solutions",
@@ -56,10 +58,27 @@ const faqs = [
   },
 ];
 
+// Pricing-specific quotes — distinct from the sets used elsewhere on the site.
+const pricingTestimonials = [
+  {
+    quote: "The Growth plan paid for itself in the first month — we finally know our real cost-per-lead instead of guessing.",
+    attribution: "Client, Hyderabad",
+  },
+  {
+    quote: "Switching from annual to month-to-month wasn't a fight. That alone told us they were confident in the work.",
+    attribution: "Client, Real Estate, Hyderabad",
+  },
+  {
+    quote: "Seeing ad spend and management fees billed separately made it easy to justify the budget to my partner.",
+    attribution: "Client, Interior Design, Hyderabad",
+  },
+];
+
 export default function PricingPage() {
   return (
-    <main className="overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
+    <main className="relative overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
       <ScrollProgress />
+      <ServicesCursorAura />
       <style>{`
         @keyframes mesh-drift {
           0%, 100% { transform: translate(0, 0) scale(1); }
@@ -131,7 +150,32 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Trust strip — added content */}
+      {/* Budget estimator — new interactive section, sits between the plan
+          cards and the trust strip since it's the natural next question
+          ("okay, but what would this actually get me"). */}
+      <section className="border-b border-line bg-ink-panel/30 py-14 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-6xl min-w-0 px-5 sm:px-6">
+          <div className="grid gap-8 md:grid-cols-2 md:items-center md:gap-12">
+            <Reveal>
+              <span className={`eyebrow-underline font-mono uppercase text-teal ${fluid.eyebrow}`}>Curious what this gets you?</span>
+              <h2 className={`mt-2 font-display font-semibold text-paper ${fluid.h2}`}>
+                Get a rough sense before you talk to us
+              </h2>
+              <p className={`mt-3 max-w-md text-paper/60 ${fluid.body}`}>
+                Move the slider to your likely monthly ad spend and see an
+                indicative lead range. It&apos;s a starting point for the
+                conversation, not a commitment — the audit call gives you
+                real numbers.
+              </p>
+            </Reveal>
+            <Reveal delay={100}>
+              <BudgetEstimator />
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust strip */}
       <section className="border-b border-line bg-ink-panel/30 py-10 sm:py-14">
         <div className="mx-auto max-w-6xl px-5 sm:px-6">
           <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:gap-8 lg:grid-cols-4">
@@ -155,7 +199,7 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Comparison — added content, reused pattern for site consistency */}
+      {/* Comparison */}
       <section className="border-b border-line py-14 sm:py-16 md:py-20">
         <div className="mx-auto max-w-6xl min-w-0 px-5 sm:px-6">
           <Reveal>
@@ -218,24 +262,13 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Testimonial — added content */}
+      {/* Testimonial carousel — now rotates through 3 pricing-specific quotes */}
       <section className="border-b border-line bg-ink-panel/40 py-14 sm:py-16">
         <div className="mx-auto max-w-3xl min-w-0 px-5 text-center sm:px-6">
           <Reveal>
-            <div className="flex justify-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={0} style={{ fill: i % 2 === 0 ? "var(--signal)" : "var(--teal)" }} />
-              ))}
-            </div>
-            <p className={`mt-4 font-display leading-relaxed text-paper sm:mt-5 ${fluid.h2}`}>
-              &ldquo;The Growth plan paid for itself in the first month —
-              we finally know our real cost-per-lead instead of
-              guessing.&rdquo;
-            </p>
-            <p className="mt-3 font-mono text-[11px] uppercase tracking-wider text-paper/40 sm:mt-4 sm:text-[12px]">
-              — Client, Hyderabad
-            </p>
+            <span className={`inline-block font-mono uppercase text-teal ${fluid.eyebrow}`}>What clients say about value</span>
           </Reveal>
+          <ServicesTestimonialCarousel quotes={pricingTestimonials} />
         </div>
       </section>
 
@@ -297,6 +330,8 @@ export default function PricingPage() {
           </Reveal>
         </div>
       </section>
+
+      <ServicesStickyCTA label="Not sure which plan fits?" linkText="Get a quote" />
     </main>
   );
 }

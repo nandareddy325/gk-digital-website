@@ -1,8 +1,11 @@
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowUpRight, ArrowLeft, Clock } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import PostThumbnail from "@/components/PostThumbnail";
+import ScrollProgress from "@/components/ScrollProgress";
+import { ServicesCursorAura, ServicesStickyCTA } from "@/components/ServicesPageInteractive";
+import ShareButtons from "@/components/ShareButtons";
 import { blogPosts, getPostBySlug } from "@/components/data/blog";
 
 export function generateStaticParams() {
@@ -37,7 +40,10 @@ export default function BlogPostPage({
   const related = blogPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   return (
-    <main className="pt-32">
+    <main className="relative overflow-x-hidden pt-32">
+      <ScrollProgress />
+      <ServicesCursorAura />
+
       <article>
         <section className="relative overflow-hidden border-b border-line py-16">
           <div
@@ -73,12 +79,15 @@ export default function BlogPostPage({
             </Reveal>
 
             <Reveal delay={180}>
-              <div className="mt-5 flex items-center gap-4 text-sm text-paper/50">
-                <span>{formatDate(post.date)}</span>
-                <span className="flex items-center gap-1">
-                  <Clock className="h-3.5 w-3.5" strokeWidth={2} />
-                  {post.readTime}
-                </span>
+              <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-4 text-sm text-paper/50">
+                  <span>{formatDate(post.date)}</span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-3.5 w-3.5" strokeWidth={2} />
+                    {post.readTime}
+                  </span>
+                </div>
+                <ShareButtons title={post.title} />
               </div>
             </Reveal>
           </div>
@@ -88,14 +97,7 @@ export default function BlogPostPage({
           <div className="mx-auto max-w-4xl px-6">
             <Reveal>
               <div className="relative h-64 w-full overflow-hidden rounded-2xl border border-line md:h-96">
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 800px"
-                  className="object-cover"
-                  priority
-                />
+                <PostThumbnail post={post} />
               </div>
             </Reveal>
           </div>
@@ -110,6 +112,16 @@ export default function BlogPostPage({
                     {para}
                   </p>
                 ))}
+              </div>
+            </Reveal>
+
+            {/* Bottom share row — for readers who scroll all the way through */}
+            <Reveal delay={80}>
+              <div className="mt-10 flex items-center justify-between border-t border-line pt-6">
+                <span className="font-mono text-[11px] uppercase tracking-wider text-paper/40">
+                  Found this useful?
+                </span>
+                <ShareButtons title={post.title} />
               </div>
             </Reveal>
           </div>
@@ -132,13 +144,7 @@ export default function BlogPostPage({
                     className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-ink transition-colors hover:bg-ink-panel"
                   >
                     <div className="relative h-32 w-full overflow-hidden bg-ink-panel">
-                      <Image
-                        src={p.image}
-                        alt={p.title}
-                        fill
-                        sizes="33vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
+                      <PostThumbnail post={p} className="transition-transform duration-500 group-hover:scale-105" />
                     </div>
                     <div className="flex flex-1 flex-col justify-between gap-4 p-6">
                       <div>
@@ -189,6 +195,8 @@ export default function BlogPostPage({
           </Reveal>
         </div>
       </section>
+
+      <ServicesStickyCTA label="Ready to put this into practice?" linkText="Get a quote" />
     </main>
   );
 }

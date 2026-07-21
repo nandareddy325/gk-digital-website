@@ -19,6 +19,11 @@ import {
   Scissors,
   ShoppingCart,
   Filter,
+  Layers,
+  MessageCircle,
+  BarChart3,
+  Quote,
+  Star,
 } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import CountUp from "@/components/CountUp";
@@ -26,6 +31,9 @@ import TalkToTeamButton from "@/components/TalkToTeamButton";
 import SpotlightCard from "@/components/SpotlightCard";
 import ScrollProgress from "@/components/ScrollProgress";
 import FunnelGraph from "@/components/FunnelGraph";
+import AboutCursorAura from "@/components/AboutCursorAura";
+import AboutStickyCTA from "@/components/AboutStickyCTA";
+import AboutTestimonialCarousel from "@/components/AboutTestimonialCarousel";
 
 export const metadata = {
   title: "About GK Digital Solutions | Our Story, Mission & Team",
@@ -51,6 +59,8 @@ const stats = [
   { value: 2.4, decimals: 1, prefix: "₹", suffix: "Cr+", label: "Ad spend tracked", icon: Award },
 ];
 
+// Expanded from 3 to 5 steps — adds where the CRM fits in and an honest
+// "what's next" close instead of ending on a static present-tense claim.
 const journey = [
   {
     n: "01",
@@ -59,13 +69,23 @@ const journey = [
   },
   {
     n: "02",
-    title: "The system we built",
-    desc: "Strategy, creative, media buying and CRM under one roof, so every lead is tracked from first click to closed deal — not just reported as an impression.",
+    title: "The first fix",
+    desc: "We started by unifying strategy, creative and media buying under one roof — so at least the campaigns pulled in the same direction, on the same brief.",
   },
   {
     n: "03",
+    title: "The system we built",
+    desc: "That wasn't enough on its own. We built a CRM pipeline into the process, so every lead is tracked from first click to closed deal — not just reported as an impression.",
+  },
+  {
+    n: "04",
     title: "Where we are today",
     desc: "A full-service digital growth partner for interior design, real estate, hospitality and skin & hair brands across Hyderabad — audited honestly, run transparently.",
+  },
+  {
+    n: "05",
+    title: "What we're building next",
+    desc: "Deeper automation — WhatsApp follow-up, lead scoring, and reporting that updates itself — so clients spend less time chasing status updates and more time closing.",
   },
 ];
 
@@ -98,10 +118,21 @@ const team = [
   { role: "Web & CRM", desc: "Builds the websites, landing pages and CRM pipelines that turn traffic into tracked leads.", initials: "WC" },
 ];
 
+// NOTE: replace with real, verified badges/logos before publishing — do not
+// claim a certification or partnership status that hasn't actually been
+// earned, since this is a checkable public claim.
+const toolsWeUse = [
+  { icon: Target, label: "Meta Ads Manager" },
+  { icon: BarChart3, label: "Google Ads & Analytics" },
+  { icon: MessageCircle, label: "WhatsApp Business API" },
+  { icon: Layers, label: "Custom CRM Pipeline" },
+];
+
 export default function AboutPage() {
   return (
     <main className="overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
       <ScrollProgress />
+      <AboutCursorAura />
       <style>{`
         @keyframes mesh-drift {
           0%, 100% { transform: translate(0, 0) scale(1); }
@@ -161,10 +192,17 @@ export default function AboutPage() {
           100% { transform: scale(1); opacity: 1; }
         }
         .avatar-pop { animation: avatar-pop 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+        @keyframes particle-drift {
+          0% { transform: translate(0, 0); opacity: 0; }
+          10% { opacity: 0.5; }
+          90% { opacity: 0.5; }
+          100% { transform: translate(var(--px, 30px), -120px); opacity: 0; }
+        }
+        .hero-particle { animation: particle-drift linear infinite; }
         @media (prefers-reduced-motion: reduce) {
           .mesh-blob, .mesh-blob-2, .hero-gradient-text, .highlight-card,
           .marquee-track, .cta-border-glow, .shimmer-btn::after, .journey-line,
-          .eyebrow-underline::after, .icon-float, .avatar-pop {
+          .eyebrow-underline::after, .icon-float, .avatar-pop, .hero-particle {
             animation: none !important;
           }
         }
@@ -182,6 +220,28 @@ export default function AboutPage() {
           style={{ background: "linear-gradient(135deg, var(--teal), var(--signal))" }}
           aria-hidden="true"
         />
+
+        {/* Ambient rising particles, same motif as the homepage hero — kept
+            subtle and desktop-only so mobile stays clean and fast. */}
+        <div className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block" aria-hidden="true">
+          {[...Array(8)].map((_, i) => (
+            <span
+              key={i}
+              className="hero-particle absolute h-1 w-1 rounded-full"
+              style={
+                {
+                  left: `${10 + i * 11}%`,
+                  bottom: "-10px",
+                  background: i % 2 === 0 ? "var(--signal)" : "var(--teal)",
+                  animationDuration: `${10 + (i % 4) * 2}s`,
+                  animationDelay: `${i * 1.1}s`,
+                  "--px": `${(i % 3) * 18 - 18}px`,
+                } as React.CSSProperties
+              }
+            />
+          ))}
+        </div>
+
         <div className="relative mx-auto max-w-4xl min-w-0 px-5 sm:px-6">
           <Reveal>
             <span className={`inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 font-mono uppercase text-paper/50 ${fluid.eyebrow}`}>
@@ -338,7 +398,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Funnel Graph — new section: how leads move through the system */}
+      {/* Funnel Graph — how leads move through the system */}
       <section className="relative border-b border-line py-14 sm:py-16 md:py-20">
         <div className="pointer-events-none absolute left-1/2 top-0 h-40 w-64 -translate-x-1/2 rounded-full bg-teal/5 blur-3xl" aria-hidden="true" />
         <div className="relative mx-auto max-w-4xl min-w-0 px-5 sm:px-6">
@@ -489,6 +549,39 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Tools & platforms — factual list of what we operate in, deliberately
+          NOT phrased as "certified" or "official partner" unless that status
+          is actually verified; swap in real badge logos when you have them. */}
+      <section className="border-b border-line py-14 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-6xl min-w-0 px-5 sm:px-6">
+          <Reveal>
+            <span className={`eyebrow-underline font-mono uppercase text-teal ${fluid.eyebrow}`}>Under the hood</span>
+            <h2 className={`mt-2 max-w-lg font-display font-semibold text-paper ${fluid.h2}`}>
+              Where the work actually happens
+            </h2>
+            <p className={`mt-3 max-w-xl text-paper/60 ${fluid.body}`}>
+              No mystery stack. These are the platforms your campaigns and
+              leads run through, day to day.
+            </p>
+          </Reveal>
+          <div className="mt-8 grid grid-cols-2 gap-3.5 sm:mt-10 sm:gap-4 lg:grid-cols-4">
+            {toolsWeUse.map((t, i) => (
+              <Reveal key={t.label} delay={i * 60}>
+                <div className="flex items-center gap-3 rounded-xl border border-line bg-ink-panel/30 p-4 transition-colors hover:border-signal/30 sm:p-5">
+                  <div
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                    style={{ background: "linear-gradient(135deg, rgba(27,84,199,0.15), rgba(122,193,66,0.15))" }}
+                  >
+                    <t.icon className="h-4 w-4 text-signal" strokeWidth={1.75} />
+                  </div>
+                  <span className="text-[12.5px] font-medium text-paper/80 sm:text-sm">{t.label}</span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Industries marquee */}
       <section className="border-b border-line py-8 sm:py-10">
         <div className="mx-auto max-w-6xl px-5 sm:px-6">
@@ -511,6 +604,35 @@ export default function AboutPage() {
                     </span>
                   ))}
                 </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Founder spotlight — About pages read as more trustworthy with a
+          named person behind them, not just a logo. NOTE: confirm exact
+          name/title spelling before publishing. */}
+      <section className="border-b border-line py-14 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-4xl px-5 sm:px-6">
+          <Reveal>
+            <div className="flex flex-col items-center gap-6 rounded-2xl border border-line bg-ink-panel/30 p-6 text-center backdrop-blur-sm sm:p-10 md:flex-row md:gap-8 md:text-left">
+              <div
+                className="avatar-pop flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl font-display text-xl font-semibold text-white shadow-lg sm:h-20 sm:w-20 sm:text-2xl"
+                style={{ background: "linear-gradient(135deg, var(--signal), var(--teal))" }}
+              >
+                G
+              </div>
+              <div>
+                <span className={`eyebrow-underline font-mono uppercase text-teal ${fluid.eyebrow}`}>Founder&apos;s note</span>
+                <h2 className={`mt-2 font-display font-semibold text-paper ${fluid.h2}`}>
+                  &ldquo;We built this because we got tired of agencies that couldn&apos;t answer &apos;so what did that spend actually get us?&apos;&rdquo;
+                </h2>
+                <p className={`mt-3 text-paper/60 ${fluid.body}`}>
+                  Ganesh, Founder &amp; Managing Director, GK Digital
+                  Solutions — part of GKA1 Enterprises, alongside GK Home
+                  Interiors.
+                </p>
               </div>
             </div>
           </Reveal>
@@ -555,6 +677,25 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Testimonial carousel — client-side rotating quotes, distinct set
+          from the homepage so the two pages don't repeat content. */}
+      <section className="border-b border-line bg-ink-panel/30 py-14 sm:py-20">
+        <div className="mx-auto max-w-4xl px-5 text-center sm:px-6">
+          <Reveal>
+            <Quote className="mx-auto h-6 w-6 text-signal/40" strokeWidth={1.5} />
+            <div className="mt-3 flex justify-center gap-1">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={0} style={{ fill: i % 2 === 0 ? "var(--signal)" : "var(--teal)" }} />
+              ))}
+            </div>
+            <span className={`mt-4 inline-block font-mono uppercase text-teal sm:mt-5 ${fluid.eyebrow}`}>
+              In their words
+            </span>
+          </Reveal>
+          <AboutTestimonialCarousel />
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-14 sm:py-16 md:py-20">
         <div className="mx-auto max-w-6xl min-w-0 px-5 sm:px-6">
@@ -589,6 +730,8 @@ export default function AboutPage() {
           </Reveal>
         </div>
       </section>
+
+      <AboutStickyCTA />
     </main>
   );
 }

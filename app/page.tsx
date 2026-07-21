@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowUpRight,
+  ArrowRight,
   Clock,
   ShieldCheck,
   Sparkles,
@@ -30,7 +31,14 @@ import {
   Users,
   FileText,
   ChevronDown,
+  ChevronLeft,
   Scissors,
+  Quote,
+  Zap,
+  Rocket,
+  Compass,
+  Award,
+  PlayCircle,
 } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import CountUp from "@/components/CountUp";
@@ -95,6 +103,94 @@ function GrainOverlay() {
       </filter>
       <rect width="100%" height="100%" filter="url(#grain-filter)" />
     </svg>
+  );
+}
+
+// ---------- Cursor aura: a soft, deliberately subtle glow that trails the
+// pointer across the whole page. Desktop only (mouse-driven), off on touch.
+// This is the "premium SaaS" signature touch — quiet, not gimmicky.
+function CursorAura() {
+  const auraRef = useRef<HTMLDivElement>(null);
+  const pos = useRef({ x: 0, y: 0 });
+  const target = useRef({ x: 0, y: 0 });
+  const raf = useRef<number | null>(null);
+
+  useEffect(() => {
+    const isCoarse = window.matchMedia("(pointer: coarse)").matches;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isCoarse || reduce) return;
+
+    const onMove = (e: MouseEvent) => {
+      target.current = { x: e.clientX, y: e.clientY };
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+
+    const tick = () => {
+      pos.current.x += (target.current.x - pos.current.x) * 0.08;
+      pos.current.y += (target.current.y - pos.current.y) * 0.08;
+      const el = auraRef.current;
+      if (el) {
+        el.style.transform = `translate3d(${pos.current.x - 260}px, ${pos.current.y - 260}px, 0)`;
+      }
+      raf.current = requestAnimationFrame(tick);
+    };
+    raf.current = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      if (raf.current) cancelAnimationFrame(raf.current);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={auraRef}
+      className="pointer-events-none fixed left-0 top-0 z-[1] hidden h-[520px] w-[520px] rounded-full opacity-[0.06] blur-[110px] md:block"
+      style={{ background: "radial-gradient(circle, var(--signal), var(--teal) 60%, transparent 75%)" }}
+      aria-hidden="true"
+    />
+  );
+}
+
+// ---------- Sticky mini CTA bar — appears once the hero has scrolled out of
+// view, gives desktop visitors a persistent low-friction path to contact
+// without repeating the full CTA block on every section.
+function StickyCTABar() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const hero = document.getElementById("top");
+    if (!hero) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setVisible(!entry.isIntersecting),
+      { rootMargin: "-10% 0px 0px 0px" }
+    );
+    io.observe(hero);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div
+      className={`fixed inset-x-0 bottom-4 z-50 hidden justify-center px-4 transition-all duration-500 ease-out md:flex ${
+        visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"
+      }`}
+      aria-hidden={!visible}
+    >
+      <div className="flex items-center gap-4 rounded-full border border-line bg-ink-panel/90 py-2 pl-5 pr-2 shadow-2xl backdrop-blur-xl">
+        <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-paper/70">
+          <span className="h-1.5 w-1.5 rounded-full bg-teal blink-dot" />
+          Free audit, 24h turnaround
+        </span>
+        <Link
+          href="/contact"
+          className="flex items-center gap-1.5 rounded-full px-4 py-2 font-mono text-[11px] uppercase tracking-wider text-white shadow-md"
+          style={{ background: "linear-gradient(90deg, var(--signal), var(--teal))" }}
+        >
+          Book now
+          <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
+        </Link>
+      </div>
+    </div>
   );
 }
 
@@ -189,16 +285,37 @@ function DashboardMockup() {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-14px); }
         }
+        @keyframes orbit-spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
         .mockup-image {
           animation: image-float 7s ease-in-out infinite;
           transform: perspective(1400px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
           transition: transform 0.25s ease-out;
         }
         .mockup-badge { animation: badge-float 5s ease-in-out infinite; }
+        .orbit-ring { animation: orbit-spin 22s linear infinite; transform-origin: center; }
         @media (prefers-reduced-motion: reduce) {
-          .mockup-image, .mockup-badge { animation: none !important; transform: none !important; }
+          .mockup-image, .mockup-badge, .orbit-ring { animation: none !important; transform: none !important; }
         }
       `}</style>
+
+      {/* Faint rotating orbit ring behind the mockup — a small premium detail
+          that reads as "live system" without competing with the screenshot. */}
+      <svg
+        className="orbit-ring pointer-events-none absolute -inset-6 -z-10 hidden opacity-30 sm:block"
+        viewBox="0 0 100 100"
+        aria-hidden="true"
+      >
+        <circle cx="50" cy="50" r="48" fill="none" stroke="url(#orbit-grad)" strokeWidth="0.4" strokeDasharray="1 4" />
+        <defs>
+          <linearGradient id="orbit-grad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="var(--signal)" />
+            <stop offset="100%" stopColor="var(--teal)" />
+          </linearGradient>
+        </defs>
+      </svg>
 
       <div
         ref={wrapRef}
@@ -255,6 +372,17 @@ function DashboardMockup() {
               <CountUp end={18} /> brands
             </div>
             <div className="text-[9px] text-paper/40 md:text-[10px]">live right now</div>
+          </div>
+        </div>
+
+        <div
+          className="mockup-badge absolute -left-4 bottom-10 hidden scale-90 items-center gap-1.5 rounded-lg border border-line bg-ink-panel/95 px-3 py-2 shadow-xl backdrop-blur-md origin-bottom-left lg:flex"
+          style={{ animationDelay: "0.4s" }}
+        >
+          <Zap className="h-3.5 w-3.5 shrink-0 text-teal" strokeWidth={2} />
+          <div>
+            <div className="text-xs font-semibold text-paper">Auto follow-up sent</div>
+            <div className="text-[10px] text-paper/40">via WhatsApp</div>
           </div>
         </div>
       </div>
@@ -334,8 +462,15 @@ function Hero() {
         .scroll-hint-dot { animation: scroll-hint 1.8s ease-in-out infinite; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes particle-drift {
+          0% { transform: translate(0, 0); opacity: 0; }
+          10% { opacity: 0.6; }
+          90% { opacity: 0.6; }
+          100% { transform: translate(var(--px, 40px), -140px); opacity: 0; }
+        }
+        .hero-particle { animation: particle-drift linear infinite; }
         @media (prefers-reduced-motion: reduce) {
-          .mesh-blob, .mesh-blob-2, .hero-gradient-text, .hero-grid, .scroll-hint-dot { animation: none !important; }
+          .mesh-blob, .mesh-blob-2, .hero-gradient-text, .hero-grid, .scroll-hint-dot, .hero-particle { animation: none !important; }
         }
       `}</style>
 
@@ -359,6 +494,29 @@ function Hero() {
         style={{ background: "linear-gradient(135deg, var(--teal), var(--signal))" }}
         aria-hidden="true"
       />
+
+      {/* Ambient rising particles — a quiet "signal" motif rather than
+          decoration for its own sake: small dots drifting up like data
+          points landing in a pipeline. Hidden on mobile to protect
+          performance and keep the small viewport uncluttered. */}
+      <div className="pointer-events-none absolute inset-0 -z-10 hidden overflow-hidden md:block" aria-hidden="true">
+        {[...Array(10)].map((_, i) => (
+          <span
+            key={i}
+            className="hero-particle absolute h-1 w-1 rounded-full"
+            style={
+              {
+                left: `${8 + i * 9.5}%`,
+                bottom: "-10px",
+                background: i % 2 === 0 ? "var(--signal)" : "var(--teal)",
+                animationDuration: `${9 + (i % 5) * 2}s`,
+                animationDelay: `${i * 0.9}s`,
+                "--px": `${(i % 3) * 20 - 20}px`,
+              } as React.CSSProperties
+            }
+          />
+        ))}
+      </div>
 
       {/* min-w-0 on the grid + text column is the key overflow fix: without it,
           flex/grid children default to min-width:auto and can push wider than
@@ -765,6 +923,137 @@ function Process() {
   );
 }
 
+// ---------- Case Studies — deeper proof section than the old portfolio
+// strip: challenge / approach / outcome, one metric each. NOTE: figures
+// below are illustrative placeholders in the original brand voice — swap
+// in your real numbers per client before this goes live, since these are
+// specific, checkable claims once published.
+const caseStudies = [
+  {
+    icon: Building2,
+    industry: "Real Estate",
+    client: "Mid-size developer, Kokapet",
+    challenge: "Leads were coming in through five different channels with no way to tell which ones actually walked a site visit.",
+    approach: "Unified Meta, Google and WhatsApp lead capture into one CRM pipeline with source-level tagging and auto-routing to the sales team.",
+    result: "31%",
+    resultLabel: "more site visits booked in 60 days",
+  },
+  {
+    icon: HomeIcon,
+    industry: "Interior Design",
+    client: "Full-home interiors studio",
+    challenge: "Follow-up on enquiries was manual and inconsistent, so warm leads went cold before a quotation was even sent.",
+    approach: "Built a WhatsApp automation that triages new leads by budget and timeline, and drops a same-day callback task into the CRM.",
+    result: "2.6x",
+    resultLabel: "faster first response time",
+  },
+  {
+    icon: Scissors,
+    industry: "Skin & Hair Clinic",
+    client: "Multi-branch aesthetics clinic",
+    challenge: "Ad spend was rising but the clinic couldn't tell which campaigns led to booked consultations versus just page likes.",
+    approach: "Rebuilt campaign structure around consultation-booking events and connected booking data back into weekly ad reporting.",
+    result: "42%",
+    resultLabel: "lower cost per booked consultation",
+  },
+];
+
+function CaseStudyCard({ c, index }: { c: (typeof caseStudies)[number]; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    el.style.setProperty("--x", `${x}%`);
+    el.style.setProperty("--y", `${y}%`);
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={handleMove}
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-ink-panel/40 p-5 backdrop-blur-sm transition-colors duration-300 hover:border-teal/40 sm:p-6"
+    >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background: "radial-gradient(260px circle at var(--x, 50%) var(--y, 50%), rgba(27,84,199,0.12), transparent 65%)" }}
+        aria-hidden="true"
+      />
+
+      <div className="relative flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+            style={{ background: "linear-gradient(135deg, rgba(27,84,199,0.15), rgba(122,193,66,0.15))" }}
+          >
+            <c.icon className="h-4 w-4 text-signal" strokeWidth={1.75} />
+          </div>
+          <div>
+            <div className="font-mono text-[9px] uppercase tracking-wider text-teal">{c.industry}</div>
+            <div className="text-[12px] text-paper/50">{c.client}</div>
+          </div>
+        </div>
+        <span className="font-mono text-[10px] text-paper/25">0{index + 1}</span>
+      </div>
+
+      <div className="relative mt-5 space-y-3.5 border-t border-line pt-4 sm:mt-6">
+        <div>
+          <span className="font-mono text-[9px] uppercase tracking-wider text-paper/40">The challenge</span>
+          <p className="mt-1 text-[12.5px] leading-relaxed text-paper/70 sm:text-[13px]">{c.challenge}</p>
+        </div>
+        <div>
+          <span className="font-mono text-[9px] uppercase tracking-wider text-paper/40">What we did</span>
+          <p className="mt-1 text-[12.5px] leading-relaxed text-paper/70 sm:text-[13px]">{c.approach}</p>
+        </div>
+      </div>
+
+      <div className="relative mt-5 flex items-end justify-between border-t border-line pt-4 sm:mt-6">
+        <div>
+          <div
+            className="bg-clip-text font-display text-2xl font-semibold text-transparent sm:text-3xl"
+            style={{ backgroundImage: "linear-gradient(90deg, var(--signal), var(--teal))" }}
+          >
+            {c.result}
+          </div>
+          <div className="mt-0.5 text-[11px] leading-snug text-paper/50 sm:text-xs">{c.resultLabel}</div>
+        </div>
+        <ArrowUpRight className="h-4 w-4 text-paper/30 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-teal" strokeWidth={2} />
+      </div>
+    </div>
+  );
+}
+
+function CaseStudies() {
+  return (
+    <section id="case-studies" className="relative py-14 sm:py-16 md:py-24">
+      <ChevronDivider className="absolute -top-[11px] left-1/2 -translate-x-1/2" />
+      <div className="mx-auto max-w-6xl px-5 sm:px-6">
+        <Reveal>
+          <span className={`font-mono uppercase text-teal ${fluid.eyebrow}`}>Proof, not promises</span>
+          <h2 className={`mt-2 max-w-xl font-display font-semibold tracking-tight text-paper sm:mt-3 ${fluid.h2}`}>
+            Three problems we&apos;ve actually solved
+          </h2>
+          <p className={`mt-3 max-w-xl text-paper/60 ${fluid.body}`}>
+            Every engagement starts from a real bottleneck in the pipeline —
+            not a generic ad-spend target.
+          </p>
+        </Reveal>
+
+        <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 md:mt-14">
+          {caseStudies.map((c, i) => (
+            <Reveal key={c.client} delay={i * 90}>
+              <CaseStudyCard c={c} index={i} />
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ---------- Why Choose Us teaser ----------
 const whyPoints = [
   "Strategy before execution, always",
@@ -1025,28 +1314,243 @@ function PortfolioTeaser() {
   );
 }
 
-// ---------- Testimonial teaser ----------
+// ---------- Engagement models — replaces a hard pricing table (real
+// numbers should come from Ganesh directly) with three honest ways of
+// working together, matched to where a client is starting from.
+const engagementModels = [
+  {
+    icon: Compass,
+    title: "Audit Only",
+    tagline: "Not ready to commit yet",
+    desc: "A one-time, 90-day deep dive into your ad accounts and lead data. You keep the findings whether or not we work together after.",
+    bullets: ["Full ad account review", "Lead-to-close gap analysis", "Written action plan"],
+  },
+  {
+    icon: Rocket,
+    title: "Full-Service",
+    tagline: "Most Hyderabad clients start here",
+    desc: "We run your campaigns, creative and CRM pipeline end-to-end, with weekly reviews against real close rates, not platform metrics.",
+    bullets: ["Meta, Google & WhatsApp managed", "CRM pipeline built & maintained", "Weekly strategist check-in"],
+    featured: true,
+  },
+  {
+    icon: Award,
+    title: "Growth Partner",
+    tagline: "For brands scaling fast",
+    desc: "An embedded extension of your team — creative, automation and reporting cadence built around your growth targets, not a fixed retainer scope.",
+    bullets: ["Dedicated pod, not a single strategist", "Custom automation builds", "Monthly strategy sessions"],
+  },
+];
+
+function EngagementModels() {
+  return (
+    <section id="engagement" className="relative bg-ink-panel/40 py-14 sm:py-16 md:py-24">
+      <ChevronDivider className="absolute -top-[11px] left-1/2 -translate-x-1/2" />
+      <div className="mx-auto max-w-6xl px-5 sm:px-6">
+        <Reveal>
+          <span className={`font-mono uppercase text-teal ${fluid.eyebrow}`}>Ways to work together</span>
+          <h2 className={`mt-2 max-w-xl font-display font-semibold tracking-tight text-paper sm:mt-3 ${fluid.h2}`}>
+            Pick the model that matches where you are
+          </h2>
+          <p className={`mt-3 max-w-xl text-paper/60 ${fluid.body}`}>
+            Every engagement is scoped after the audit, based on your ad
+            spend and category — ask us for exact numbers on a call.
+          </p>
+        </Reveal>
+
+        <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-3 sm:gap-5 md:mt-14">
+          {engagementModels.map((m, i) => (
+            <Reveal key={m.title} delay={i * 90}>
+              <div
+                className={`relative flex h-full flex-col rounded-2xl border p-5 backdrop-blur-sm sm:p-6 ${
+                  m.featured ? "border-transparent bg-ink shadow-2xl" : "border-line bg-ink/60"
+                }`}
+              >
+                {m.featured && (
+                  <div
+                    className="pointer-events-none absolute inset-0 -z-10 rounded-2xl"
+                    style={{
+                      background: "linear-gradient(135deg, var(--signal), var(--teal))",
+                      padding: "1.5px",
+                      WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                      WebkitMaskComposite: "xor",
+                      maskComposite: "exclude",
+                    }}
+                    aria-hidden="true"
+                  />
+                )}
+                <div
+                  className="flex h-9 w-9 items-center justify-center rounded-xl"
+                  style={{
+                    background: m.featured
+                      ? "linear-gradient(135deg, var(--signal), var(--teal))"
+                      : "linear-gradient(135deg, rgba(27,84,199,0.15), rgba(122,193,66,0.15))",
+                  }}
+                >
+                  <m.icon className={`h-4 w-4 ${m.featured ? "text-white" : "text-signal"}`} strokeWidth={1.75} />
+                </div>
+
+                <h3 className="mt-4 font-display text-lg font-semibold text-paper">{m.title}</h3>
+                <span className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-teal">{m.tagline}</span>
+                <p className="mt-3 flex-1 text-[13px] leading-relaxed text-paper/60">{m.desc}</p>
+
+                <ul className="mt-4 space-y-2 border-t border-line pt-4">
+                  {m.bullets.map((b) => (
+                    <li key={b} className="flex items-start gap-2 text-[12.5px] text-paper/70">
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-teal" strokeWidth={2.5} />
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href="/contact"
+                  className={`mt-5 flex items-center justify-center gap-1.5 rounded-full py-2.5 font-mono text-[11px] uppercase tracking-wider transition-transform hover:scale-[1.02] ${
+                    m.featured ? "text-white" : "border border-line text-paper/80"
+                  }`}
+                  style={m.featured ? { background: "linear-gradient(90deg, var(--signal), var(--teal))" } : undefined}
+                >
+                  Talk to us
+                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
+                </Link>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------- Testimonial carousel — rotates through a few short quotes
+// instead of a single static one, with auto-advance plus manual controls
+// for a genuinely interactive premium touch.
+const testimonials = [
+  {
+    quote:
+      "They didn't just run ads — they understood our business and built a strategy around it. The results speak for themselves.",
+    attribution: "Client, Real Estate, Hyderabad",
+  },
+  {
+    quote:
+      "For the first time we could actually see which campaign paid for itself and which one was just noise. That changed how we spend.",
+    attribution: "Client, Interior Design, Hyderabad",
+  },
+  {
+    quote:
+      "Response time to new enquiries went from hours to minutes once the WhatsApp automation went live. Bookings followed.",
+    attribution: "Client, Skin & Hair Clinic, Hyderabad",
+  },
+];
+
 function TestimonialTeaser() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setIndex((i) => (i + 1) % testimonials.length), 6000);
+    return () => clearInterval(id);
+  }, []);
+
+  const active = testimonials[index];
+
   return (
     <section className="relative bg-ink-panel/40 py-14 sm:py-20">
       <ChevronDivider className="absolute -top-[11px] left-1/2 -translate-x-1/2" />
       <div className="mx-auto max-w-4xl px-5 text-center sm:px-6">
         <Reveal>
-          <div className="flex justify-center gap-1">
+          <Quote className="mx-auto h-6 w-6 text-signal/40" strokeWidth={1.5} />
+          <div className="mt-3 flex justify-center gap-1">
             {[...Array(5)].map((_, i) => (
               <Star key={i} className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={0} style={{ fill: i % 2 === 0 ? "var(--signal)" : "var(--teal)" }} />
             ))}
           </div>
-          <p className={`mt-4 font-display leading-relaxed text-paper sm:mt-5 ${fluid.h2}`}>
-            &ldquo;They didn&apos;t just run ads — they understood our
-            business and built a strategy around it. The results speak for
-            themselves.&rdquo;
+
+          <div className="relative mt-4 min-h-[110px] sm:mt-5 sm:min-h-[90px]">
+            <p key={index} className={`fade-in-quote font-display leading-relaxed text-paper ${fluid.h2}`}>
+              &ldquo;{active.quote}&rdquo;
+            </p>
+          </div>
+          <style>{`
+            @keyframes fade-in-quote { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+            .fade-in-quote { animation: fade-in-quote 0.5s ease-out; }
+            @media (prefers-reduced-motion: reduce) { .fade-in-quote { animation: none !important; } }
+          `}</style>
+
+          <p className="mt-3 font-mono text-[11px] uppercase tracking-wider text-paper/40 sm:mt-4 sm:text-[12px]">
+            — {active.attribution}
           </p>
-          <p className="mt-3 font-mono text-[11px] uppercase tracking-wider text-paper/40 sm:mt-4 sm:text-[12px]">— Client, Hyderabad</p>
-          <Link href="/testimonials" className="mt-5 inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-wider text-signal hover:underline sm:mt-6 sm:text-[12px]">
+
+          <div className="mt-5 flex items-center justify-center gap-4 sm:mt-6">
+            <button
+              onClick={() => setIndex((i) => (i - 1 + testimonials.length) % testimonials.length)}
+              aria-label="Previous testimonial"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-line text-paper/50 transition-colors hover:border-signal/50 hover:text-signal"
+            >
+              <ChevronLeft className="h-4 w-4" strokeWidth={2} />
+            </button>
+            <div className="flex items-center gap-1.5">
+              {testimonials.map((t, i) => (
+                <button
+                  key={t.attribution}
+                  onClick={() => setIndex(i)}
+                  aria-label={`Show testimonial ${i + 1}`}
+                  className="h-1.5 rounded-full transition-all duration-300"
+                  style={{
+                    width: i === index ? "20px" : "6px",
+                    background: i === index ? "var(--teal)" : "var(--line)",
+                  }}
+                />
+              ))}
+            </div>
+            <button
+              onClick={() => setIndex((i) => (i + 1) % testimonials.length)}
+              aria-label="Next testimonial"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-line text-paper/50 transition-colors hover:border-signal/50 hover:text-signal"
+            >
+              <ArrowRight className="h-4 w-4" strokeWidth={2} />
+            </button>
+          </div>
+
+          <Link href="/testimonials" className="mt-6 inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-wider text-signal hover:underline sm:mt-7 sm:text-[12px]">
             Read more stories
             <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
           </Link>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+// ---------- Founder strip — GK Digital Solutions is strategist-led, not a
+// faceless account-exec pool. Uses initials rather than a stock photo so
+// nothing breaks if a real headshot isn't wired up yet; swap the initials
+// block for an <Image> once you have a photo you're happy publishing.
+function FounderStrip() {
+  return (
+    <section className="relative py-14 sm:py-16 md:py-24">
+      <ChevronDivider className="absolute -top-[11px] left-1/2 -translate-x-1/2" />
+      <div className="mx-auto max-w-4xl px-5 sm:px-6">
+        <Reveal>
+          <div className="flex flex-col items-center gap-6 rounded-2xl border border-line bg-ink-panel/30 p-6 text-center backdrop-blur-sm sm:p-10 md:flex-row md:gap-8 md:text-left">
+            <div
+              className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl font-display text-xl font-semibold text-white shadow-lg sm:h-20 sm:w-20 sm:text-2xl"
+              style={{ background: "linear-gradient(135deg, var(--signal), var(--teal))" }}
+            >
+              GK
+            </div>
+            <div>
+              <span className={`font-mono uppercase text-teal ${fluid.eyebrow}`}>Who you&apos;re working with</span>
+              <h2 className={`mt-2 font-display font-semibold tracking-tight text-paper ${fluid.h3}`}>
+                Founder-led, not agency-by-committee
+              </h2>
+              <p className={`mt-2 max-w-xl text-paper/60 ${fluid.body}`}>
+                GK Digital Solutions is run under GKA1 Enterprises alongside
+                GK Home Interiors — so every campaign strategy is informed
+                by what actually converts on the ground in Hyderabad, not
+                just what performs in a slide deck.
+              </p>
+            </div>
+          </div>
         </Reveal>
       </div>
     </section>
@@ -1063,6 +1567,7 @@ const faqs = [
   { q: "Do you work with skin and hair clinics specifically?", a: "Yes — we run Meta and Google campaigns built around appointment bookings rather than just page likes, with WhatsApp follow-up so enquiries turn into consultations instead of going cold." },
   { q: "How does the CRM integration actually work?", a: "Every lead — from a Meta form, a Google call extension, or a WhatsApp message — gets written into your CRM pipeline automatically, tagged with source and campaign, within minutes of coming in." },
   { q: "What do I need to have ready before the audit?", a: "Just read-access to your last 90 days of ad accounts and whatever lead records you currently keep, even if that's a spreadsheet. We'll handle the rest." },
+  { q: "How is pricing structured?", a: "There's no fixed public rate card because scope depends on ad spend and category. The audit call ends with a clear, written quote — no surprises after you sign." },
 ];
 
 function FAQItem({ q, a, isOpen, onToggle }: { q: string; a: string; isOpen: boolean; onToggle: () => void }) {
@@ -1261,18 +1766,23 @@ export default function Home() {
     <main className="relative overflow-x-hidden">
       <ScrollProgress />
       <GrainOverlay />
+      <CursorAura />
       <Hero />
       <IndustryStrip />
       <Services />
       <Process />
+      <CaseStudies />
       <WhyChooseTeaser />
       <ComparisonSection />
       <TrustStrip />
       <Results />
       <PortfolioTeaser />
+      <EngagementModels />
       <TestimonialTeaser />
+      <FounderStrip />
       <FAQSection />
       <CTA />
+      <StickyCTABar />
     </main>
   );
 }

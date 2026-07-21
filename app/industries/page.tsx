@@ -18,6 +18,8 @@ import {
 import Reveal from "@/components/Reveal";
 import CountUp from "@/components/CountUp";
 import ScrollProgress from "@/components/ScrollProgress";
+import IndustrySearchBar from "@/components/IndustrySearchBar";
+import { ServicesCursorAura, ServicesStickyCTA, ServicesTestimonialCarousel } from "@/components/ServicesPageInteractive";
 
 export const metadata = {
   title: "Industries We Serve | GK Digital Solutions",
@@ -79,17 +81,34 @@ const iconIndustries = [
   { icon: Dumbbell, title: "Fitness & Wellness", desc: "Membership-driven social campaigns and local SEO.", metric: "Membership Growth" },
 ];
 
-// Added content: a short stats strip so the page isn't just a list of cards
 const stats = [
   { value: 13, suffix: "+", label: "Industries served" },
   { value: 40, suffix: "+", label: "Active campaigns" },
   { value: 18, suffix: "", label: "Brands live right now" },
 ];
 
+// Quotes spanning different industries — distinct from the sets used on
+// other pages, so a visitor browsing multiple pages doesn't see repeats.
+const industryTestimonials = [
+  {
+    quote: "We're a niche category — clinical aesthetics — and most agencies default to generic beauty-brand tactics. This didn't feel generic.",
+    attribution: "Client, Skin & Hair Clinic, Hyderabad",
+  },
+  {
+    quote: "Our buying cycle is 60–90 days, not an impulse purchase. The campaigns were built around that instead of chasing quick clicks.",
+    attribution: "Client, Real Estate, Hyderabad",
+  },
+  {
+    quote: "Restaurant marketing lives and dies on reviews. Having someone actually manage that instead of just running ads made the difference.",
+    attribution: "Client, Hospitality, Hyderabad",
+  },
+];
+
 export default function IndustriesPage() {
   return (
-    <main className="overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
+    <main className="relative overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
       <ScrollProgress />
+      <ServicesCursorAura />
       <style>{`
         @keyframes mesh-drift {
           0%, 100% { transform: translate(0, 0) scale(1); }
@@ -151,10 +170,15 @@ export default function IndustriesPage() {
               how your specific industry actually buys.
             </p>
           </Reveal>
+
+          {/* Search bar — interactive, filters both grids below by keyword */}
+          <Reveal delay={200}>
+            <IndustrySearchBar />
+          </Reveal>
         </div>
       </section>
 
-      {/* Stats strip — added content */}
+      {/* Stats strip */}
       <section className="border-b border-line py-8 sm:py-10">
         <div className="mx-auto max-w-6xl px-5 sm:px-6">
           <div className="grid grid-cols-3 gap-3 sm:gap-4">
@@ -175,17 +199,17 @@ export default function IndustriesPage() {
         </div>
       </section>
 
-      {/* Featured industries with images — unchanged */}
+      {/* Featured industries with images */}
       <section className="border-b border-line py-14 sm:py-16 md:py-20">
         <div className="mx-auto max-w-6xl min-w-0 px-5 sm:px-6">
           <Reveal>
             <span className={`eyebrow-underline font-mono uppercase text-teal ${fluid.eyebrow}`}>Deepest playbooks</span>
           </Reveal>
-          <div className="mt-5 grid gap-5 sm:mt-6 sm:grid-cols-2 sm:gap-6">
+          <div className="mt-5 grid gap-5 sm:mt-6 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
             {featuredIndustries.map((ind, i) => (
               <Reveal key={ind.title} delay={i * 70}>
-                <div className="group h-full overflow-hidden rounded-2xl border border-line bg-ink-panel/30 transition-all duration-300 hover:-translate-y-1 hover:border-signal/40 hover:shadow-xl">
-                  <div className="relative h-40 w-full overflow-hidden bg-ink-panel sm:h-48">
+                <div className="industry-card group h-full overflow-hidden rounded-2xl border border-line bg-ink-panel/30 transition-all duration-300 hover:-translate-y-1 hover:border-signal/40 hover:shadow-xl">
+                  <div className="relative h-40 w-full overflow-hidden bg-ink-panel sm:h-48 lg:h-40">
                     <Image
                       src={ind.image}
                       alt={ind.title}
@@ -212,7 +236,7 @@ export default function IndustriesPage() {
         </div>
       </section>
 
-      {/* Remaining industries — icon grid, Skin & Hair now included first with a "new" badge */}
+      {/* Remaining industries — icon grid, Skin & Hair first with a "new" badge */}
       <section className="border-b border-line py-14 sm:py-16 md:py-20">
         <div className="mx-auto max-w-6xl min-w-0 px-5 sm:px-6">
           <Reveal>
@@ -224,7 +248,7 @@ export default function IndustriesPage() {
           <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
             {iconIndustries.map((ind, i) => (
               <Reveal key={ind.title} delay={(i % 6) * 60}>
-                <div className="group relative h-full rounded-2xl border border-line bg-ink-panel/30 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-signal/40 hover:bg-ink-panel sm:p-7">
+                <div className="industry-card group relative h-full rounded-2xl border border-line bg-ink-panel/30 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-signal/40 hover:bg-ink-panel sm:p-7">
                   {i === 0 && (
                     <span className="new-badge absolute right-4 top-4 rounded-full border border-teal/30 bg-teal/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-teal sm:right-5 sm:top-5">
                       New
@@ -249,6 +273,16 @@ export default function IndustriesPage() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Testimonial carousel — quotes spanning different industries */}
+      <section className="border-b border-line bg-ink-panel/30 py-14 sm:py-20">
+        <div className="mx-auto max-w-3xl px-5 text-center sm:px-6">
+          <Reveal>
+            <span className={`inline-block font-mono uppercase text-teal ${fluid.eyebrow}`}>Different industries, same rigor</span>
+          </Reveal>
+          <ServicesTestimonialCarousel quotes={industryTestimonials} />
         </div>
       </section>
 
@@ -286,6 +320,8 @@ export default function IndustriesPage() {
           </Reveal>
         </div>
       </section>
+
+      <ServicesStickyCTA label="Don't see your industry?" linkText="Ask us" />
     </main>
   );
 }

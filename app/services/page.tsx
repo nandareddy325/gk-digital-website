@@ -19,11 +19,22 @@ import {
   UtensilsCrossed,
   Scissors,
   ShoppingCart,
+  ClipboardList,
+  Layers,
+  LineChart,
+  X,
+  Check,
 } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import CountUp from "@/components/CountUp";
 import SpotlightCard from "@/components/SpotlightCard";
 import ScrollProgress from "@/components/ScrollProgress";
+import {
+  ServicesCursorAura,
+  ServicesStickyCTA,
+  ServicesTestimonialCarousel,
+  ServicesFAQSection,
+} from "@/components/ServicesPageInteractive";
 
 export const metadata = {
   title: "Digital Marketing Services | SEO, Ads, Web Design & Branding",
@@ -74,10 +85,35 @@ const industries = [
   { icon: ShoppingCart, label: "E-Commerce" },
 ];
 
+// How a new client actually picks the right mix of services — framed around
+// the decision itself, not a generic "our process" retread of the homepage.
+const chooseSteps = [
+  { n: "01", icon: ClipboardList, title: "Tell us the goal", desc: "More leads, more bookings, a brand refresh — we start from the business outcome, not a service menu." },
+  { n: "02", icon: Layers, title: "We map the channels", desc: "Based on your category and budget, we recommend 2–4 services that actually move that outcome — not all eleven by default." },
+  { n: "03", icon: LineChart, title: "Launch & track together", desc: "Every service feeds the same CRM pipeline, so you see what's working across channels, not in eleven separate reports." },
+];
+
+// One team vs. hiring specialists separately — the real decision most
+// visitors are weighing before they scroll this far.
+const comparisonRows: { label: string; separate: string; us: string }[] = [
+  { label: "Coordination", separate: "You manage handoffs between freelancers", us: "One team, one weekly update" },
+  { label: "Brand consistency", separate: "Different voice per channel", us: "Same strategist across every service" },
+  { label: "Lead tracking", separate: "Each channel reports separately", us: "Everything lands in one CRM pipeline" },
+  { label: "Switching cost", separate: "Re-briefing a new hire from scratch", us: "Add or drop a service, same team" },
+];
+
+const servicesFaqs = [
+  { q: "Do I need to book all 11 services?", a: "No — most clients start with 2–4 services matched to their goal after the audit. We'll tell you honestly if a service isn't worth your budget yet." },
+  { q: "Can I bundle services together?", a: "Yes. Most engagements combine paid ads, CRM/WhatsApp automation and either SEO or content, since these compound each other rather than working in isolation." },
+  { q: "How is a service priced?", a: "Scope depends on ad spend, channel count and category — there's no fixed public rate card. You'll get a written quote after the audit call." },
+  { q: "Can I add a service later without restarting?", a: "Yes — since everything runs through the same CRM and strategist, adding a service mid-engagement doesn't mean re-briefing from zero." },
+];
+
 export default function ServicesPage() {
   return (
-    <main className="overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
+    <main className="relative overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
       <ScrollProgress />
+      <ServicesCursorAura />
       <style>{`
         @keyframes mesh-drift {
           0%, 100% { transform: translate(0, 0) scale(1); }
@@ -110,8 +146,10 @@ export default function ServicesPage() {
           50% { transform: translateY(-3px); }
         }
         .icon-float { animation: icon-float 3.4s ease-in-out infinite; }
+        @keyframes draw-line { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+        .process-line { animation: draw-line 1.4s ease-out forwards; transform-origin: left; }
         @media (prefers-reduced-motion: reduce) {
-          .mesh-blob, .highlight-card, .marquee-track, .eyebrow-underline::after, .icon-float {
+          .mesh-blob, .highlight-card, .marquee-track, .eyebrow-underline::after, .icon-float, .process-line {
             animation: none !important;
           }
         }
@@ -148,7 +186,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Quick stats strip — added content */}
+      {/* Quick stats strip */}
       <section className="border-b border-line py-8 sm:py-10">
         <div className="mx-auto max-w-6xl px-5 sm:px-6">
           <div className="grid grid-cols-3 gap-3 sm:gap-4">
@@ -255,7 +293,107 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Industries we serve — new section with Skin & Hair added */}
+      {/* How to choose — new section: the decision, not a generic process retread */}
+      <section className="border-b border-line py-14 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-6xl min-w-0 px-5 sm:px-6">
+          <Reveal>
+            <span className={`eyebrow-underline font-mono uppercase text-teal ${fluid.eyebrow}`}>Not sure where to start?</span>
+            <h2 className={`mt-2 max-w-xl font-display font-semibold text-paper ${fluid.h2}`}>
+              How we help you pick the right mix
+            </h2>
+          </Reveal>
+
+          <div className="relative mt-10 sm:mt-12">
+            <div className="relative hidden sm:block">
+              <div
+                className="process-line absolute left-0 right-0 top-[calc(0.9rem)] h-px"
+                style={{ background: "linear-gradient(90deg, var(--signal), var(--teal))" }}
+              />
+            </div>
+            <div className="grid gap-7 sm:grid-cols-3 sm:gap-8">
+              {chooseSteps.map((step, i) => (
+                <Reveal key={step.n} delay={i * 90}>
+                  <div className="group relative">
+                    <div className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border border-line bg-ink font-mono text-[11px] text-signal transition-colors group-hover:border-signal/60 sm:h-9 sm:w-9">
+                      {step.n}
+                    </div>
+                    <div className="mt-4 flex items-center gap-2">
+                      <step.icon className="h-4 w-4 text-teal" strokeWidth={1.75} />
+                      <h3 className="font-display text-base font-semibold text-paper sm:text-lg">{step.title}</h3>
+                    </div>
+                    <p className="mt-2 text-[13px] leading-relaxed text-paper/60 sm:text-sm">{step.desc}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison — one team vs. hiring specialists separately */}
+      <section className="border-b border-line bg-ink-panel/30 py-14 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-6xl min-w-0 px-5 sm:px-6">
+          <Reveal>
+            <span className={`eyebrow-underline font-mono uppercase text-teal ${fluid.eyebrow}`}>The alternative</span>
+            <h2 className={`mt-2 max-w-xl font-display font-semibold text-paper ${fluid.h2}`}>
+              One team vs. hiring specialists separately
+            </h2>
+          </Reveal>
+
+          <Reveal delay={80}>
+            <div className="mt-8 space-y-3 sm:hidden">
+              {comparisonRows.map((row) => (
+                <div key={row.label} className="rounded-xl border border-line bg-ink/60 p-4">
+                  <div className="text-[13px] font-semibold text-paper">{row.label}</div>
+                  <div className="mt-3 grid grid-cols-2 gap-3">
+                    <div className="flex items-start gap-1.5 min-w-0">
+                      <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-paper/30" strokeWidth={2} />
+                      <span className="text-[12px] leading-snug text-paper/50">{row.separate}</span>
+                    </div>
+                    <div
+                      className="flex min-w-0 items-start gap-1.5 rounded-lg p-2 -m-2"
+                      style={{ background: "linear-gradient(180deg, rgba(27,84,199,0.08), rgba(122,193,66,0.05))" }}
+                    >
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-teal" strokeWidth={2.5} />
+                      <span className="text-[12px] leading-snug text-paper">{row.us}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-10 hidden overflow-hidden rounded-2xl border border-line sm:block">
+              <div className="grid grid-cols-[1.1fr_1fr_1fr] bg-ink-panel/60 backdrop-blur-sm">
+                <div className="p-5 font-mono text-[11px] uppercase tracking-wider text-paper/40">&nbsp;</div>
+                <div className="border-l border-line p-5">
+                  <span className="font-mono text-[11px] uppercase tracking-wider text-paper/40">Hiring separately</span>
+                </div>
+                <div
+                  className="relative border-l border-line p-5"
+                  style={{ background: "linear-gradient(180deg, rgba(27,84,199,0.10), rgba(122,193,66,0.06))" }}
+                >
+                  <span className="font-mono text-[11px] uppercase tracking-wider text-teal">GK Digital Solutions</span>
+                </div>
+              </div>
+              {comparisonRows.map((row, i) => (
+                <div key={row.label} className={`grid grid-cols-[1.1fr_1fr_1fr] ${i % 2 === 0 ? "bg-ink" : "bg-ink-panel/20"}`}>
+                  <div className="flex items-center p-5 text-sm font-medium text-paper/80">{row.label}</div>
+                  <div className="flex items-center gap-2 border-l border-line p-5 text-sm text-paper/50">
+                    <X className="h-3.5 w-3.5 shrink-0 text-paper/30" strokeWidth={2} />
+                    {row.separate}
+                  </div>
+                  <div className="flex items-center gap-2 border-l border-line p-5 text-sm text-paper">
+                    <Check className="h-3.5 w-3.5 shrink-0 text-teal" strokeWidth={2.5} />
+                    {row.us}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Industries we serve */}
       <section className="border-b border-line py-8 sm:py-10">
         <div className="mx-auto max-w-6xl px-5 sm:px-6">
           <Reveal>
@@ -289,6 +427,24 @@ export default function ServicesPage() {
           </Reveal>
         </div>
       </section>
+
+      {/* Testimonial carousel */}
+      <section className="border-b border-line bg-ink-panel/30 py-14 sm:py-20">
+        <div className="mx-auto max-w-4xl px-5 text-center sm:px-6">
+          <Reveal>
+            <div className="flex justify-center gap-1">
+              <Sparkles className="h-4 w-4 text-signal/50" strokeWidth={1.5} />
+            </div>
+            <span className={`mt-3 inline-block font-mono uppercase text-teal sm:mt-4 ${fluid.eyebrow}`}>
+              What clients say about the mix
+            </span>
+          </Reveal>
+          <ServicesTestimonialCarousel />
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <ServicesFAQSection faqs={servicesFaqs} />
 
       {/* Bottom CTA */}
       <section className="py-14 sm:py-16 md:py-20">
@@ -324,6 +480,8 @@ export default function ServicesPage() {
           </Reveal>
         </div>
       </section>
+
+      <ServicesStickyCTA />
     </main>
   );
 }

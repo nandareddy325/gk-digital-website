@@ -3,6 +3,8 @@ import { ArrowUpRight, Sparkles, Target, Lightbulb, TrendingUp, Clock } from "lu
 import Reveal from "@/components/Reveal";
 import SpotlightCard from "@/components/SpotlightCard";
 import ScrollProgress from "@/components/ScrollProgress";
+import PortfolioFilterBar from "@/components/PortfolioFilterBar";
+import { ServicesCursorAura, ServicesStickyCTA } from "@/components/ServicesPageInteractive";
 
 export const metadata = {
   title: "Our Work & Case Studies | GK Digital Solutions Results",
@@ -21,14 +23,17 @@ const fluid = {
 /* Added a Skin & Hair Clinic entry, consistent with the industry added
    elsewhere on the site. All entries are still placeholders — swap in
    real challenge/strategy/results copy and metrics once client data and
-   permission are available. No numbers are fabricated here on purpose. */
+   permission are available. No numbers are fabricated here on purpose.
+   `tag` doubles as the filter value for PortfolioFilterBar. */
 const caseStudies = [
-  { title: "Real Estate Brand", tag: "Local SEO & Lead Generation" },
-  { title: "E-Commerce Store", tag: "Google Ads & Meta Ads ROI" },
-  { title: "Healthcare Clinic", tag: "Website Redesign & Local SEO" },
-  { title: "Restaurant Chain", tag: "Social Media Growth" },
-  { title: "Skin & Hair Clinic", tag: "Meta Ads & WhatsApp Booking" },
+  { title: "Real Estate Brand", tag: "Real Estate", desc: "Local SEO & Lead Generation" },
+  { title: "E-Commerce Store", tag: "E-Commerce", desc: "Google Ads & Meta Ads ROI" },
+  { title: "Healthcare Clinic", tag: "Healthcare", desc: "Website Redesign & Local SEO" },
+  { title: "Restaurant Chain", tag: "Hospitality", desc: "Social Media Growth" },
+  { title: "Skin & Hair Clinic", tag: "Skin & Hair", desc: "Meta Ads & WhatsApp Booking" },
 ];
+
+const filterTags = [...new Set(caseStudies.map((cs) => cs.tag))];
 
 const previewStructure = [
   { icon: Target, label: "The Challenge" },
@@ -38,8 +43,9 @@ const previewStructure = [
 
 export default function PortfolioPage() {
   return (
-    <main className="overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
+    <main className="relative overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
       <ScrollProgress />
+      <ServicesCursorAura />
       <style>{`
         @keyframes mesh-drift {
           0%, 100% { transform: translate(0, 0) scale(1); }
@@ -99,16 +105,24 @@ export default function PortfolioPage() {
         </div>
       </section>
 
+      {/* Filter bar — narrows the cards below by industry */}
+      <section className="border-b border-line py-6 sm:py-8">
+        <div className="mx-auto max-w-6xl px-5 sm:px-6">
+          <PortfolioFilterBar tags={filterTags} />
+        </div>
+      </section>
+
       {/* Case study cards */}
       <section className="border-b border-line py-14 sm:py-16 md:py-20">
         <div className="mx-auto max-w-6xl min-w-0 px-5 sm:px-6">
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
             {caseStudies.map((cs, i) => (
               <Reveal key={cs.title} delay={i * 70}>
+                <div className="portfolio-card h-full" data-tag={cs.tag}>
                 <SpotlightCard className="h-full rounded-2xl border border-dashed border-line bg-ink-panel/30 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-signal/40 sm:p-8">
                   <div className="flex items-start justify-between gap-3">
                     <span className="font-mono text-[10px] uppercase tracking-wider text-paper/40 sm:text-[11px]">
-                      {cs.tag}
+                      {cs.desc}
                     </span>
                     <span className="flex shrink-0 items-center gap-1 rounded-full border border-line px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-paper/40">
                       <Clock className="h-2.5 w-2.5" strokeWidth={2} />
@@ -140,6 +154,7 @@ export default function PortfolioPage() {
                     and permission are available.
                   </p>
                 </SpotlightCard>
+                </div>
               </Reveal>
             ))}
           </div>
@@ -179,6 +194,8 @@ export default function PortfolioPage() {
           </Reveal>
         </div>
       </section>
+
+      <ServicesStickyCTA label="Your success story could be next" linkText="Start now" />
     </main>
   );
 }

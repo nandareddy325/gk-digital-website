@@ -1,14 +1,19 @@
 import Link from "next/link";
-import { Sparkles, HelpCircle, Target, Wallet, Rocket, MessageCircle, ArrowUpRight } from "lucide-react";
+import { Sparkles, HelpCircle, Target, Wallet, Rocket, MessageCircle, ArrowUpRight, Mail } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import FaqAccordion from "@/components/FaqAccordion";
 import ScrollProgress from "@/components/ScrollProgress";
+import FaqSearchBar from "@/components/FaqSearchBar";
+import { ServicesCursorAura, ServicesStickyCTA } from "@/components/ServicesPageInteractive";
 
 export const metadata = {
   title: "FAQs | GK Digital Solutions",
   description:
     "Answers to common questions about GK Digital Solutions' SEO, PPC, social media, and website design services.",
 };
+
+const WHATSAPP_LINK =
+  "https://wa.me/917569622606?text=Hi!%20I%20have%20a%20question%20about%20GK%20Digital%20Solutions%27%20services.";
 
 /* Fluid type scale — continuous clamp() scaling, matches the rest of the site */
 const fluid = {
@@ -62,10 +67,18 @@ const faqCategories = [
   },
 ];
 
+// Quick-contact strip — offers a direct channel for anyone who searched
+// and still didn't find their answer, right before the accordion sections.
+const quickContacts = [
+  { icon: MessageCircle, label: "WhatsApp us", desc: "Fastest for a quick question", href: WHATSAPP_LINK, external: true },
+  { icon: Mail, label: "Email us", desc: "Best for detailed requirements", href: "mailto:hello@gkdigitalsolutions.in", external: false },
+];
+
 export default function FaqPage() {
   return (
-    <main className="overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
+    <main className="relative overflow-x-hidden pt-24 sm:pt-28 md:pt-32">
       <ScrollProgress />
+      <ServicesCursorAura />
       <style>{`
         @keyframes mesh-drift {
           0%, 100% { transform: translate(0, 0) scale(1); }
@@ -137,9 +150,14 @@ export default function FaqPage() {
             </p>
           </Reveal>
 
-          {/* Category quick-nav — added content */}
-          <Reveal delay={220}>
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-2 sm:mt-8">
+          {/* Search bar — interactive, filters categories below by keyword */}
+          <Reveal delay={200}>
+            <FaqSearchBar />
+          </Reveal>
+
+          {/* Category quick-nav */}
+          <Reveal delay={240}>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
               {faqCategories.map((cat) => (
                 <a
                   key={cat.title}
@@ -155,13 +173,41 @@ export default function FaqPage() {
         </div>
       </section>
 
+      {/* Quick-contact strip — direct channels if search doesn't find it */}
+      <section className="border-b border-line py-8 sm:py-10">
+        <div className="mx-auto max-w-3xl px-5 sm:px-6">
+          <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+            {quickContacts.map((c) => (
+              <a
+                key={c.label}
+                href={c.href}
+                {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className="group flex items-center gap-3 rounded-xl border border-line bg-ink-panel/30 p-4 transition-colors hover:border-signal/30"
+              >
+                <div
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                  style={{ background: "linear-gradient(135deg, rgba(27,84,199,0.15), rgba(122,193,66,0.15))" }}
+                >
+                  <c.icon className="h-4 w-4 text-signal" strokeWidth={1.75} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-[13px] font-medium text-paper">{c.label}</div>
+                  <div className="text-[11px] text-paper/50">{c.desc}</div>
+                </div>
+                <ArrowUpRight className="h-4 w-4 shrink-0 text-paper/30 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal" strokeWidth={2} />
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Categorized FAQ sections */}
       <div className="mx-auto max-w-3xl min-w-0 px-5 sm:px-6">
         {faqCategories.map((cat, ci) => (
           <section
             key={cat.title}
             id={cat.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}
-            className="scroll-mt-28 border-b border-line py-10 last:border-b-0 sm:py-14"
+            className="faq-category-section scroll-mt-28 border-b border-line py-10 last:border-b-0 sm:py-14"
           >
             <Reveal delay={ci * 40}>
               <div className="flex items-center gap-3">
@@ -186,7 +232,7 @@ export default function FaqPage() {
         ))}
       </div>
 
-      {/* CTA — added content */}
+      {/* CTA */}
       <section className="py-14 sm:py-16 md:py-20">
         <div className="mx-auto max-w-4xl min-w-0 px-5 sm:px-6">
           <Reveal>
@@ -219,6 +265,8 @@ export default function FaqPage() {
           </Reveal>
         </div>
       </section>
+
+      <ServicesStickyCTA label="Still have a question?" linkText="Ask us" />
     </main>
   );
 }
